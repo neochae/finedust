@@ -66,3 +66,5 @@ target/
 bower_components/
 node_modules/
 
+#mac
+.DS_Store
