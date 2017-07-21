@@ -1,0 +1,33 @@
+Reference
+https://github.com/python-telegram-bot/python-telegram-bot/wiki/Code-snippets
+
+Pure API
+Fetch updates
+Fetch images sent to your Bot
+Reply to messages
+General code snippets
+Post a text message
+Reply to a message
+Post a text message with Markdown formatting
+Post a text message with HTML formatting
+Post an image file from disk
+Post a voice file from disk
+Post a photo from a URL
+Post an audio from disk
+Post a file from disk
+Post an image from memory
+Send a chat action
+Custom Keyboards
+Requesting location and contact from user
+Remove a custom keyboard
+Download a file
+Message entities
+Advanced snippets
+Restrict access to a handler (decorator)
+Usage
+Cached Telegram group administrator check
+Build a menu with Buttons
+Usage
+Simple way of restarting the bot
+What to read next?
+Table of contents generated with markdown-toc
