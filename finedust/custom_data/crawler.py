@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import time
 
 #driver = webdriver.Chrome('../../chromedriver/mac/chromedriver')
-driver = webdriver.PhantomJS('../../phantomjs/mac/bin/phantomjs')
+driver = webdriver.PhantomJS('/usr/bin/phantomjs')
 driver.implicitly_wait(3)
 
 driver.get('https://nid.naver.com/nidlogin.login')
