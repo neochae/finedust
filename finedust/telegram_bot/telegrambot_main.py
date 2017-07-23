@@ -4,15 +4,16 @@ import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 
-class FinedustBot:
-    TELEGRAM_TOKEN = '380017530:AAEngJF7oCIos-WzKf-XDOwKTumhoV-H5KE'
+from finedust.settings.setting import *
 
+
+class FinedustBot:
     @staticmethod
     def get_token():
-        return FinedustBot.TELEGRAM_TOKEN
+        return TELEGRAM_TOKEN
 
     def __init__(self):
-        self.telegram_bot = telegram.Bot(FinedustBot.TELEGRAM_TOKEN)
+        self.telegram_bot = telegram.Bot(TELEGRAM_TOKEN)
         logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                             level=logging.INFO)
         logger = logging.getLogger(__name__)

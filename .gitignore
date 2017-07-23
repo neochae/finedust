@@ -7,7 +7,7 @@ __pycache__/
 # C extensions
 *.so
 
-#tmp
+#Pycharm
 .idea
 
 # Distribution / packaging
@@ -58,9 +58,6 @@ docs/_build/
 
 # PyBuilder
 target/
-
-# PyCharm
-.idea/
 
 # bower
 bower_components/
