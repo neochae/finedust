@@ -17,4 +17,14 @@ TELEGRAM_TOKEN = "380017530:AAEngJF7oCIos-WzKf-XDOwKTumhoV-H5KE"
 NID = 'kaistsw2017'
 NPWD = 'naver111'
 
+
+#Database
+DATABASES = {
+    'NAME': 'sep545',
+    'USER': 'sep545',
+    'PASSWORD': '1234',
+    'HOST': '52.78.164.147',
+    'PORT': '5432',
+}
+
 #Key
