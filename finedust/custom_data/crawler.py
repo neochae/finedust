@@ -6,8 +6,8 @@ import sys
 
 sys.path.append("..")
 sys.path.append("../..")
-#from finedust.settings.setting import *
-from finedust.settings.local_setting import *
+from finedust.settings.setting import *
+#from finedust.settings.local_setting import *
 
 base_url = 'http://cafe.naver.com/dustout2'
 driver = webdriver.PhantomJS(PHANTOM_WEBDRIVER)
