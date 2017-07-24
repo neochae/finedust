@@ -27,7 +27,7 @@ class CustomDataCrawler:
         self.detail_writer = '#ct > div.post_title > * > a.nick > span.end_user_nick > span'
         self.detail_date = '#ct > div.post_title > * > span.date.font_l'
         self.detail_content = '#postContent'
-        self.capture = True
+        self.capture = False
 
         self.driver = webdriver.PhantomJS(PHANTOM_WEBDRIVER)
         #self.driver = webdriver.Chrome('../chromedriver/mac/chromedriver')
