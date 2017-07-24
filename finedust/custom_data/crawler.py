@@ -7,13 +7,11 @@ import re
 from io import BytesIO
 from PIL import Image
 
-
 sys.path.append("..")
 sys.path.append("../..")
-#from finedust.settings.setting import *
+
 from finedust.settings.local_setting import *
 from finedust.util.screen import *
-
 
 class CustomDataCrawler:
     def __init__(self):
