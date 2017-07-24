@@ -4,11 +4,15 @@ from bs4 import BeautifulSoup
 import time
 import sys
 import re
+from io import BytesIO
+from PIL import Image
+
 
 sys.path.append("..")
 sys.path.append("../..")
-from finedust.settings.setting import *
-#from finedust.settings.local_setting import *
+#from finedust.settings.setting import *
+from finedust.settings.local_setting import *
+from finedust.util.screen import *
 
 
 class CustomDataCrawler:
@@ -25,6 +29,7 @@ class CustomDataCrawler:
         self.detail_writer = '#ct > div.post_title > * > a.nick > span.end_user_nick > span'
         self.detail_date = '#ct > div.post_title > * > span.date.font_l'
         self.detail_content = '#postContent'
+        self.capture = True
 
         self.driver = webdriver.PhantomJS(PHANTOM_WEBDRIVER)
         #self.driver = webdriver.Chrome('../chromedriver/mac/chromedriver')
@@ -78,9 +83,14 @@ class CustomDataCrawler:
 
         #articles
         self.driver.get(main_url)
+        time.sleep(10)
         self.driver.switch_to.frame(self.main_iframe);
         html = self.driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
+
+        #image save
+        if self.capture:
+            page_screenshot(self.driver, 'images/main_%s.png' % (menuid))
 
         articles = list()
         links = soup.select(self.main_element)
@@ -100,6 +110,10 @@ class CustomDataCrawler:
         self.driver.get(detail_url)
         html = self.driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
+
+        #image save
+        if self.capture:
+            page_screenshot(self.driver, 'images/article_%s.png' % (articleid))
 
         #contente
         category = self.find_element(soup, self.detail_category)

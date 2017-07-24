@@ -3,9 +3,23 @@ from selenium import webdriver
 import os
 import time
 from PIL import Image
+from io import BytesIO
 
+
+#현재 화면을 그대로 파일로 저장합니다
+def page_screenshot(driver, file):
+    driver.save_screenshot(file)
+    return True
+
+#현재 화면을 Crop하여 JPG로 저장합니다
+def page_image_resize(driver, file, box=(0, 0, 1024, 768)):
+    img = Image.open(BytesIO(driver.get_screenshot_as_png()))
+    cropped_img = img.crop(box).convert('RGB')
+    cropped_img.save(file, "JPEG")
+
+
+#Chrome Driver의 경우 가상으로 아래 화면까지 저장
 def fullpage_screenshot(driver, file):
-
         print("Starting full page screenshot workaround ...")
 
         total_width = driver.execute_script("return document.body.offsetWidth")
@@ -71,8 +85,3 @@ def fullpage_screenshot(driver, file):
         stitched_image.save(file)
         print("Finishing full page screenshot workaround...")
         return True
-
-def page_screenshot(driver, file):
-    driver.get_screenshot_as_file(file)
-
-    return True
