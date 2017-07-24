@@ -72,3 +72,7 @@ def fullpage_screenshot(driver, file):
         print("Finishing full page screenshot workaround...")
         return True
 
+def page_screenshot(driver, file):
+    driver.get_screenshot_as_file(file)
+
+    return True
