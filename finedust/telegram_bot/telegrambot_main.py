@@ -3,9 +3,11 @@
 import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
+import sys
 
+sys.path.append("..")
+sys.path.append("../..")
 from finedust.settings.setting import *
-
 
 class FinedustBot:
     @staticmethod
