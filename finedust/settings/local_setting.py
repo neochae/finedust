@@ -8,3 +8,5 @@ elif _platform == "win32":
 elif _platform == "win64":
     PHANTOM_WEBDRIVER = PROJECT_DIR + "/phantomjs/win/bin/phantomjs.exe"
 
+# PHANTOM_WEBDRIVER = PROJECT_DIR + "/phantomjs/win/bin/phantomjs.exe"
+
