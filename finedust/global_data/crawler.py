@@ -22,7 +22,7 @@ class GlobalDataCrawler :
 
     def get_globaldata(self):
         resp = requests.get(self.basicUrl + self.id + self.lastUrl, headers={'User-agent': 'Mozilla/5.0'})
-        print(resp.text)
+        # print(resp.text)
         json_data = self.get_json(resp)
         js_normal_data = json_normalize(json_data['rxs'][0])
         self.get_forecast_wind_data(js_normal_data)
