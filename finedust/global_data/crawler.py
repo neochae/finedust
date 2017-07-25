@@ -15,7 +15,7 @@ from finedust.util.screen import *
 
 #TODO, Crawling
 
-resp = requests.get('https://api.waqi.info/api/feed/@1451/obs.kr.json')
+resp = requests.get('https://api.waqi.info/api/feed/@1451/obs.kr.json', headers={'User-agent': 'Mozilla/5.0'})
 print(resp.text)
 
 # # response = urllib2.urlopen('https://api.waqi.info/api/feed/@1451/obs.kr.json')
