@@ -28,11 +28,15 @@ class GlobalDataCrawler :
 
         self.get_current_dust_data(js_normal_data)
 
-    def get_current_dust_data(self, js_normal_data):
-        df_dust_current = json_normalize(js_normal_data['msg.iaqi'][0])
-        print(df_dust_current)
-        dust_data = pd.DataFrame([[item[0] for item in df_dust_current['v']]], columns=df_dust_current['p'].tolist())
-        dust_data['time'] = df_dust_current['h'][0][0]
+    def get_current_dust_data(self, data):
+        df_dust_current = json_normalize(data['msg.iaqi'][0])
+
+        # print(df_dust_current)
+        dust_data_columns = ['PM25','PM10','O3','NO2','SO2','CO','TEMP','DEW','PRESSURE','HUMID','WIND']
+        # dust_data = pd.DataFrame([[item[0] for item in df_dust_current['v']]], columns=df_dust_current['p'].tolist())
+        dust_data = pd.DataFrame([[item[0] for item in df_dust_current['v']]], columns=dust_data_columns)
+        dust_data['TIME'] = df_dust_current['h'][0][0]
+        dust_data['CITYNAME'] = data['msg.city.id']
         return print(dust_data)
 
     def get_json(self, data):
