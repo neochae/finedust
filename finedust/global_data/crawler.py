@@ -25,8 +25,16 @@ class GlobalDataCrawler :
         print(resp.text)
         json_data = self.get_json(resp)
         js_normal_data = json_normalize(json_data['rxs'][0])
-
+        self.get_forecast_wind_data(js_normal_data)
         self.get_current_dust_data(js_normal_data)
+
+    def get_forecast_wind_data(self, js_normal_data):
+        df_dust_wind = json_normalize(js_normal_data['msg.forecast.wind'][0])
+        wind_time = pd.DataFrame({'WIND_TIME': df_dust_wind['t']})
+        wind_speed = pd.DataFrame({'WIND_SPEED': [item[0] for item in df_dust_wind['w']]})
+        wind_direction = pd.DataFrame({'WIND_DIRECTION': [item[2] for item in df_dust_wind['w']]})
+        df_totoal_wind = pd.concat([wind_time, wind_speed, wind_direction], axis=1)
+        return print(df_totoal_wind)
 
     def get_current_dust_data(self, data):
         df_dust_current = json_normalize(data['msg.iaqi'][0])
@@ -38,6 +46,8 @@ class GlobalDataCrawler :
         dust_data['TIME'] = df_dust_current['h'][0][0]
         dust_data['CITYNAME'] = data['msg.city.id']
         return print(dust_data)
+
+
 
     def get_json(self, data):
         self.data = data
