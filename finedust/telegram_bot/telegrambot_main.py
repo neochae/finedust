@@ -4,10 +4,12 @@ import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import sys
+import os
 
-sys.path.append("..")
-sys.path.append("../..")
-from finedust.settings.setting import *
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.join(BASE_DIR, '..'))
+
+from finedust.settings.local_setting import *
 
 class FinedustBot:
     @staticmethod

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from selenium import webdriver
-from bs4 import BeautifulSoup
-import time
-import sys
 
-sys.path.append("..")
-sys.path.append("../..")
-from finedust.settings.setting import *
+import sys
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.join(BASE_DIR, '..'))
+
+from finedust.settings.local_setting import *
+from finedust.util.screen import *
 
 #TODO, Crawling

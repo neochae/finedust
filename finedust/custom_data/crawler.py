@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 from selenium import webdriver
 from bs4 import BeautifulSoup
-import time
+import os
 import sys
 import re
-from io import BytesIO
-from PIL import Image
 
-sys.path.append("..")
-sys.path.append("../..")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.join(BASE_DIR, '..'))
 
 from finedust.settings.local_setting import *
 from finedust.util.screen import *
@@ -27,7 +25,7 @@ class CustomDataCrawler:
         self.detail_writer = '#ct > div.post_title > * > a.nick > span.end_user_nick > span'
         self.detail_date = '#ct > div.post_title > * > span.date.font_l'
         self.detail_content = '#postContent'
-        self.capture = False
+        self.capture = True
 
         self.driver = webdriver.PhantomJS(PHANTOM_WEBDRIVER)
         #self.driver = webdriver.Chrome('../chromedriver/mac/chromedriver')
@@ -88,7 +86,7 @@ class CustomDataCrawler:
 
         #image save
         if self.capture:
-            page_screenshot(self.driver, 'images/main_%s.png' % (menuid))
+            page_screenshot(self.driver, IMAGE_DIR + 'main_%s.png' % (menuid))
 
         articles = list()
         links = soup.select(self.main_element)
@@ -111,7 +109,7 @@ class CustomDataCrawler:
 
         #image save
         if self.capture:
-            page_screenshot(self.driver, 'images/article_%s.png' % (articleid))
+            page_screenshot(self.driver, IMAGE_DIR + 'article_%s.png' % (articleid))
 
         #contente
         category = self.find_element(soup, self.detail_category)

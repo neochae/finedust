@@ -1,7 +1,9 @@
 import sys
+import os
 
-sys.path.append("..")
-sys.path.append("../..")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.join(BASE_DIR, '..'))
+
 from finedust.settings.local_setting import *
 from finedust.util.screen import *
 
@@ -35,7 +37,7 @@ if __name__ == '__main__':
     size = (1024, 860)
     crop = (0, 0, 1024, 768)
     delay = 10
-    file = 'images/nullschool.jpg'
+    file = IMAGE_DIR + 'nullschool.jpg'
 
     crawler = SiteImageCrawler(url, file, size=size, crop=crop, delay=delay)
     crawler.start()

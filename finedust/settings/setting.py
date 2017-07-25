@@ -28,3 +28,6 @@ DATABASES = {
 }
 
 #Key
+
+#images
+IMAGE_DIR = BASE_DIR + "/images/"
