@@ -44,9 +44,13 @@ class FinedustBot:
         message = update.message.text
         send_message = "[%d] %s\n" % (chat_id, message)
         self.send_message(chat_id, send_message)
+        self.send_image(chat_id, IMAGE_DIR + 'nullschool.jpg')
 
     def send_message(self, chat_id, message):
         self.telegram_bot.sendMessage(chat_id, message)
+
+    def send_image(self, chat_id, file):
+        self.telegram_bot.send_photo(chat_id=chat_id, photo=open(file, 'rb'))
 
     def error(self, bot, update, error):
         self.logger.warn('Update "%s" caused error "%s"' % (update, error))
