@@ -23,6 +23,21 @@ class GlobalDataCrawler :
     def get_globaldata(self):
         resp = requests.get(self.basicUrl + self.id + self.lastUrl, headers={'User-agent': 'Mozilla/5.0'})
         print(resp.text)
+        json_data = self.get_json(resp)
+        js_normal_data = json_normalize(json_data['rxs'][0])
+
+        self.get_current_dust_data(js_normal_data)
+
+    def get_current_dust_data(self, js_normal_data):
+        df_dust_current = json_normalize(js_normal_data['msg.iaqi'][0])
+        print(df_dust_current)
+        dust_data = pd.DataFrame([[item[0] for item in df_dust_current['v']]], columns=df_dust_current['p'].tolist())
+        dust_data['time'] = df_dust_current['h'][0][0]
+        return print(dust_data)
+
+    def get_json(self, data):
+        self.data = data
+        return pd.read_json(data.text)
 
     def start(self):
         self.get_globaldata()
