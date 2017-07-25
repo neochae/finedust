@@ -19,12 +19,19 @@ NPWD = 'naver111'
 
 
 #Database
-DATABASES = {
+DATABASES_POSTGRESQL = {
     'NAME': 'sep545',
     'USER': 'sep545',
     'PASSWORD': '1234',
     'HOST': '52.78.164.147',
     'PORT': '5432',
+}
+
+DATABASES_MYSQL = {
+    'USER': 'sep545',
+    'PASSWORD': '1234',
+    'HOST': '52.78.164.147',
+    'PORT': '3306',
 }
 
 #Key
