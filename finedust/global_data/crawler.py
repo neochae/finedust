@@ -15,19 +15,18 @@ from finedust.util.screen import *
 
 #TODO, Crawling
 class GlobalDataCrawler :
-    def __init__(self,id):
+    def __init__(self):
         self.basicUrl = 'https://api.waqi.info/api/feed/@'
-        self.id = id
         self.lastUrl = '/obs.kr.json'
 
-    def get_globaldata(self):
-        resp = requests.get(self.basicUrl + self.id + self.lastUrl, headers={'User-agent': 'Mozilla/5.0'})
+    def get_globaldata(self,id):
+        resp = requests.get(self.basicUrl + id + self.lastUrl, headers={'User-agent': 'Mozilla/5.0'})
         # print(resp.text)
         json_data = self.get_json(resp)
         js_normal_data = json_normalize(json_data['rxs'][0])
-        self.get_forecast_aqi_data(js_normal_data)
-        self.get_forecast_wind_data(js_normal_data)
-        self.get_current_dust_data(js_normal_data)
+        print(self.get_forecast_aqi_data(js_normal_data))
+        print(self.get_forecast_wind_data(js_normal_data))
+        print(self.get_current_dust_data(js_normal_data))
 
     def get_forecast_aqi_data(self, data):
         df_dust_aqi = json_normalize(data['msg.forecast.aqi'][0])
@@ -67,13 +66,20 @@ class GlobalDataCrawler :
         self.data = data
         return pd.read_json(data.text)
 
+    def get_location(selfs):
+        location_info = ['1451','1449','1450','1453']
+        return location_info
+
     def start(self):
-        self.get_globaldata()
+        locations = self.get_location()
+        for location in locations :
+            # print(location)
+            self.get_globaldata(location)
+
         # self.basicUrl = 'https://api.waqi.info/api/feed'
 
 
 
 if __name__ == '__main__':
-    id = '1451'
-    crawler = GlobalDataCrawler(id)
+    crawler = GlobalDataCrawler()
     crawler.start()
