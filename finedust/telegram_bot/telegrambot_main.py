@@ -20,7 +20,7 @@ class FinedustBot:
         self.telegram_bot = telegram.Bot(TELEGRAM_TOKEN)
         logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                             level=logging.INFO)
-        logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger(__name__)
 
     def start(self, bot, update):
         chat_id = update.message.chat_id
@@ -45,12 +45,16 @@ class FinedustBot:
         send_message = "[%d] %s\n" % (chat_id, message)
         self.send_message(chat_id, send_message)
         self.send_image(chat_id, IMAGE_DIR + 'nullschool.jpg')
+        self.send_video(chat_id, IMAGE_DIR + 'nullschool.mp4')
 
     def send_message(self, chat_id, message):
         self.telegram_bot.sendMessage(chat_id, message)
 
     def send_image(self, chat_id, file):
         self.telegram_bot.send_photo(chat_id=chat_id, photo=open(file, 'rb'))
+
+    def send_video(self, chat_id, file):
+        self.telegram_bot.send_video(chat_id=chat_id, video=open(file, 'rb'), caption='영상')
 
     def error(self, bot, update, error):
         self.logger.warn('Update "%s" caused error "%s"' % (update, error))
