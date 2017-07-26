@@ -4,7 +4,7 @@ import os
 import time
 from PIL import Image
 from io import BytesIO
-
+import subprocess as sp
 
 #현재 화면을 그대로 파일로 저장합니다
 def page_screenshot(driver, file):
@@ -16,6 +16,30 @@ def page_image_resize(driver, file, box=(0, 0, 1024, 768)):
     img = Image.open(BytesIO(driver.get_screenshot_as_png()))
     cropped_img = img.crop(box).convert('RGB')
     cropped_img.save(file, "JPEG")
+
+def page_record_video(driver, file, box=(0, 0, 1024, 768)):
+    cmd_out = ['ffmpeg',
+               '-f', 'image2pipe',
+               '-vcodec', 'png',
+               '-r', '10',  # FPS
+               '-i', '-',   # Indicated input comes from pipe
+               '-vcodec', 'mpeg4',
+               '-crf', '26',
+               '-vf', 'scale=1024:768',
+               '-vb', '5M',
+               file]
+    pipe = sp.Popen(cmd_out, stdin=sp.PIPE)
+
+    for i in range(1, 30):
+        img = Image.open(BytesIO(driver.get_screenshot_as_png()))
+        cropped_img = img.crop(box)
+        cropped_img.save(pipe.stdin, "PNG")
+
+    pipe.stdin.close()
+    pipe.wait()
+
+    if pipe.returncode != 0:
+        raise sp.CalledProcessError(pipe.returncode, cmd_out)
 
 
 #Chrome Driver의 경우 가상으로 아래 화면까지 저장

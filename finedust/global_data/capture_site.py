@@ -8,9 +8,10 @@ from finedust.settings.local_setting import *
 from finedust.util.screen import *
 
 class SiteImageCrawler:
-    def __init__(self, url, file, size=None, crop=None, delay=1):
+    def __init__(self, url, file, video=None, size=None, crop=None, delay=1):
         self.url = url
         self.file = file
+        self.video = video
         self.size = size
         self.crop = crop
         self.delay = delay
@@ -23,6 +24,9 @@ class SiteImageCrawler:
             self.driver.set_window_size(self.size[0], self.size[1])
         self.driver.get(self.url)
         time.sleep(self.delay)
+
+        if self.video is not None:
+            page_record_video(self.driver, self.video, box=self.crop)
 
         if self.crop is not None:
             page_image_resize(self.driver, self.file, box=self.crop)
@@ -38,9 +42,11 @@ if __name__ == '__main__':
     crop = (0, 0, 1024, 768)
     delay = 10
     file = IMAGE_DIR + 'nullschool.jpg'
+    video = IMAGE_DIR + 'nullschool.mp4'
 
-    crawler = SiteImageCrawler(url, file, size=size, crop=crop, delay=delay)
+    crawler = SiteImageCrawler(url, file, video=video, size=size, crop=crop, delay=delay)
     crawler.start()
+
 
     url = 'http://aqicn.org/forecast/seoul/kr/'
     size = (1024, 860)
