@@ -44,17 +44,20 @@ class FinedustBot:
         message = update.message.text
         send_message = "[%d] %s\n" % (chat_id, message)
         self.send_message(chat_id, send_message)
-        self.send_image(chat_id, IMAGE_DIR + 'nullschool.jpg')
-        self.send_video(chat_id, IMAGE_DIR + 'nullschool.mp4')
+        self.send_image(chat_id, IMAGE_DIR + 'nullschool.jpg', caption='미항공우주국 사진')
+        self.send_image(chat_id, IMAGE_DIR + 'naver_pm25.jpg', caption='네이버 초미세먼지')
+        self.send_image(chat_id, IMAGE_DIR + 'naver_pm10.jpg', caption='네이버 미세먼지')
+        self.send_image(chat_id, IMAGE_DIR + 'aqicn.jpg', caption='국제 민간단체 미세먼지')
+        #self.send_video(chat_id, IMAGE_DIR + 'nullschool.mp4')
 
-    def send_message(self, chat_id, message):
-        self.telegram_bot.sendMessage(chat_id, message)
+    def send_message(self, chat_id, message, caption=None):
+        self.telegram_bot.sendMessage(chat_id, message, caption=caption)
 
-    def send_image(self, chat_id, file):
-        self.telegram_bot.send_photo(chat_id=chat_id, photo=open(file, 'rb'))
+    def send_image(self, chat_id, file, caption=None):
+        self.telegram_bot.send_photo(chat_id=chat_id, photo=open(file, 'rb'), caption=caption)
 
-    def send_video(self, chat_id, file):
-        self.telegram_bot.send_video(chat_id=chat_id, video=open(file, 'rb'), caption='영상')
+    def send_video(self, chat_id, file, caption=None):
+        self.telegram_bot.send_video(chat_id=chat_id, video=open(file, 'rb'), caption=caption)
 
     def error(self, bot, update, error):
         self.logger.warn('Update "%s" caused error "%s"' % (update, error))

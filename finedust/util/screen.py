@@ -12,10 +12,10 @@ def page_screenshot(driver, file):
     return True
 
 #현재 화면을 Crop하여 JPG로 저장합니다
-def page_image_resize(driver, file, box=(0, 0, 1024, 768)):
+def page_image_resize(driver, file, box=(0, 0, 1024, 768), quality=90):
     img = Image.open(BytesIO(driver.get_screenshot_as_png()))
     cropped_img = img.crop(box).convert('RGB')
-    cropped_img.save(file, "JPEG")
+    cropped_img.save(file, "JPEG", quality=quality)
 
 def page_record_video(driver, file, box=(0, 0, 1024, 768)):
     cmd_out = ['ffmpeg',
