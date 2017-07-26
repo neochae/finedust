@@ -35,6 +35,7 @@ DATABASES_MYSQL = {
 }
 
 #Key
+DATAGOKRSERVICEKEY = 'DHLLCOxUmx4Y%2BVmiWJWzlVLbXWTHc4zWli%2FyEHuh2WdfUoya0mR5DZBFfgn5yXgYotvtjyCy7ZkbcT%2Bo4Zv04g%3D%3D'
 
 #images
 IMAGE_DIR = BASE_DIR + "/images/"
