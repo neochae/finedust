@@ -15,18 +15,25 @@ sys.path.append(os.path.join(BASE_DIR, '..'))
 from finedust.settings.local_setting import *
 from finedust.util.screen import *
 
-# Connect to the database
-connection = pymysql.connect(host=DATABASES_MYSQL['HOST'],
+class DBConnector :
+    def __init__(self):
+        self.connection = pymysql.connect(host=DATABASES_MYSQL['HOST'],
                              user=DATABASES_MYSQL['USER'],
                              password=DATABASES_MYSQL['PASSWORD'],
                              db='mydb',
                              charset='utf8mb4',
                              cursorclass=pymysql.cursors.DictCursor)
-cursor = connection.cursor()
-sql = "SELECT DISTINCT CITY_NAME FROM `finedust_global_info` "
-cursor.execute(sql)
-result = cursor.fetchall()
 
-a = pd.DataFrame(result)
-b = a['CITY_NAME'].tolist()
-print(b)
+    def connection_DB(self):
+      return self.connection.cursor()
+
+if __name__ == '__main__':
+    db = DBConnector()
+    cursor = db.connection_DB()
+
+    sql = "SELECT DISTINCT CITY_NAME FROM `finedust_global_info` "
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    a = pd.DataFrame(result)
+    b = a['CITY_NAME'].tolist()
+    print(b)
