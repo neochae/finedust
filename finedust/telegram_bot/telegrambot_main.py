@@ -5,6 +5,7 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
 import sys
 import os
+import urllib.request
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(BASE_DIR, '..'))
@@ -118,6 +119,7 @@ class FinedustBot:
         chat_id = update.message.chat_id
         self.send_image(chat_id, IMAGE_DIR + 'naver_pm25.jpg', caption='네이버 초미세먼지')
         self.send_image(chat_id, IMAGE_DIR + 'naver_pm10.jpg', caption='네이버 미세먼지')
+        self.send_document(chat_id, IMAGE_DIR+ "forecast.gif", caption='예측자료')
 
         # TODO, 국내 주요 7개 도시에 대한 현재 수치 정보를 전송, 버튼으로 주요 도시 정보 보기 지원
 
@@ -243,6 +245,9 @@ class FinedustBot:
 
     def send_video(self, chat_id, file, caption=None):
         self.telegram_bot.send_video(chat_id=chat_id, video=open(file, 'rb'), caption=caption)
+
+    def send_document(self, chat_id, file, caption=None):
+        self.telegram_bot.send_document(chat_id=chat_id, document=open(file, 'rb'), caption=caption)
 
     def error(self, bot, update, error):
         self.logger.warn('Update "%s" caused error "%s"' % (update, error))
