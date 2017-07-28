@@ -14,6 +14,7 @@ sys.path.append(os.path.join(BASE_DIR, '..'))
 
 from finedust.settings.local_setting import *
 from finedust.util.screen import *
+from finedust.util.database import *
 
 class OpenDataCrawler :
     def __init__(self,id):
@@ -22,6 +23,10 @@ class OpenDataCrawler :
         self.servieKey = '&ServiceKey=' + DATAGOKRSERVICEKEY
         self.lastUrl = '&ver=1.1&_returnType=json'
         self.avgBasicUrl = 'http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getCtprvnMesureLIst?itemCode=PM10&dataGubun=HOUR&searchCondition=WEEK&pageNo=1&numOfRows=1'
+        self.source_info = database_get_source_id(self.basicUrl)
+        self.crawler_info = database_create_crawler_event(self.source_info)
+        self.region_info = database_get_domestic_region()
+        self.dust_info = database_get_dust_info()
 
     def get_oepndata(self):
         resp = requests.get(self.basicUrl + self.today + self.servieKey + self.lastUrl, headers={'User-agent': 'Mozilla/5.0'})
@@ -95,7 +100,7 @@ class OpenDataCrawler :
         connection = pymysql.connect(host=DATABASES_MYSQL['HOST'],
                                      user=DATABASES_MYSQL['USER'],
                                      password=DATABASES_MYSQL['PASSWORD'],
-                                     db='mydb',
+                                     db=DATABASES_MYSQL['SCHEMA'],
                                      charset='utf8mb4',
                                      cursorclass=pymysql.cursors.DictCursor)
 

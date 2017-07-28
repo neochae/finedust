@@ -3,7 +3,7 @@ CREATE SCHEMA `sep545`;
 USE `sep545`;
 
 -- MySQL Workbench Synchronization
--- Generated: 2017-07-28 16:56
+-- Generated: 2017-07-29 01:22
 -- Model: New Model
 -- Version: 1.0
 -- Project: Name of the project
@@ -13,7 +13,7 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-CREATE TABLE IF NOT EXISTS `custom_article` (
+CREATE TABLE IF NOT EXISTS `sep545`.`custom_article` (
   `article_id` INT(11) NOT NULL,
   `writer` VARCHAR(45) NOT NULL,
   `date` DATETIME NOT NULL,
@@ -28,23 +28,23 @@ CREATE TABLE IF NOT EXISTS `custom_article` (
   UNIQUE INDEX `article_id_UNIQUE` (`article_id` ASC),
   CONSTRAINT `region1`
     FOREIGN KEY (`region`)
-    REFERENCES `region` (`region_id`)
+    REFERENCES `sep545`.`region` (`region_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `crawling_event1`
     FOREIGN KEY (`crawler`)
-    REFERENCES `crawling_event` (`crawling_id`)
+    REFERENCES `sep545`.`crawling_event` (`crawling_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `data1`
     FOREIGN KEY (`data`)
-    REFERENCES `finedust_data` (`data_id`)
+    REFERENCES `sep545`.`finedust_data` (`data_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS `region_category` (
+CREATE TABLE IF NOT EXISTS `sep545`.`region_category` (
   `category_id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`category_id`),
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `region_category` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS `region` (
+CREATE TABLE IF NOT EXISTS `sep545`.`region` (
   `region_id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `eng_name` VARCHAR(45) NULL DEFAULT NULL,
@@ -61,13 +61,13 @@ CREATE TABLE IF NOT EXISTS `region` (
   INDEX `category_idx` (`category` ASC),
   CONSTRAINT `category`
     FOREIGN KEY (`category`)
-    REFERENCES `region_category` (`category_id`)
+    REFERENCES `sep545`.`region_category` (`category_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS `source_info` (
+CREATE TABLE IF NOT EXISTS `sep545`.`source_info` (
   `source_id` INT(11) NOT NULL AUTO_INCREMENT,
   `desc` VARCHAR(512) NULL DEFAULT NULL,
   `url` VARCHAR(512) NULL DEFAULT NULL,
@@ -76,21 +76,21 @@ CREATE TABLE IF NOT EXISTS `source_info` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS `crawling_event` (
+CREATE TABLE IF NOT EXISTS `sep545`.`crawling_event` (
   `crawling_id` INT(11) NOT NULL AUTO_INCREMENT,
-  `date` DATETIME NOT NULL,
+  `date` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `source` INT(11) NOT NULL,
   PRIMARY KEY (`crawling_id`),
   INDEX `source_idx` (`source` ASC),
   CONSTRAINT `source1`
     FOREIGN KEY (`source`)
-    REFERENCES `source_info` (`source_id`)
+    REFERENCES `sep545`.`source_info` (`source_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS `finedust_data` (
+CREATE TABLE IF NOT EXISTS `sep545`.`finedust_data` (
   `data_id` INT(11) NOT NULL AUTO_INCREMENT,
   `info` INT(11) NOT NULL,
   `data_min` INT(11) NULL DEFAULT NULL,
@@ -100,13 +100,13 @@ CREATE TABLE IF NOT EXISTS `finedust_data` (
   INDEX `info_id_idx` (`info` ASC),
   CONSTRAINT `info_id1`
     FOREIGN KEY (`info`)
-    REFERENCES `finedust_info` (`info_id`)
+    REFERENCES `sep545`.`finedust_info` (`info_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS `finedust_info` (
+CREATE TABLE IF NOT EXISTS `sep545`.`finedust_info` (
   `info_id` INT(11) NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`info_id`),
@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `finedust_info` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS `open_api` (
+CREATE TABLE IF NOT EXISTS `sep545`.`open_api` (
   `open_id` INT(11) NOT NULL AUTO_INCREMENT,
   `time` DATETIME NOT NULL,
   `region` INT(11) NOT NULL,
@@ -126,30 +126,30 @@ CREATE TABLE IF NOT EXISTS `open_api` (
   INDEX `region3_idx` (`region` ASC),
   CONSTRAINT `region3`
     FOREIGN KEY (`region`)
-    REFERENCES `region` (`region_id`)
+    REFERENCES `sep545`.`region` (`region_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `data3`
     FOREIGN KEY (`data`)
-    REFERENCES `finedust_data` (`data_id`)
+    REFERENCES `sep545`.`finedust_data` (`data_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `crawling_event3`
     FOREIGN KEY (`crawler`)
-    REFERENCES `crawling_event` (`crawling_id`)
+    REFERENCES `sep545`.`crawling_event` (`crawling_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS `telegram_user` (
+CREATE TABLE IF NOT EXISTS `sep545`.`telegram_user` (
   `chat_id` INT(11) NOT NULL,
-  `start_date` DATETIME NULL DEFAULT NULL,
+  `start_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`chat_id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
-CREATE TABLE IF NOT EXISTS `favorite_region` (
+CREATE TABLE IF NOT EXISTS `sep545`.`favorite_region` (
   `favorite_id` INT(11) NOT NULL AUTO_INCREMENT,
   `user` INT(11) NOT NULL,
   `region` INT(11) NOT NULL,
@@ -158,12 +158,12 @@ CREATE TABLE IF NOT EXISTS `favorite_region` (
   INDEX `user_idx` (`user` ASC),
   CONSTRAINT `user14`
     FOREIGN KEY (`user`)
-    REFERENCES `telegram_user` (`chat_id`)
+    REFERENCES `sep545`.`telegram_user` (`chat_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `region4`
     FOREIGN KEY (`region`)
-    REFERENCES `region_category` (`category_id`)
+    REFERENCES `sep545`.`region_category` (`category_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB
@@ -175,15 +175,16 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 
+
 -- crawling source
 INSERT INTO `source_info` (`source_id`, `desc`, `url`)
 	VALUES ('0', '국내 사용자 미세먼지 정보',  'http://cafe.naver.com/dustout2');
 
 INSERT INTO `source_info` (`source_id`, `desc`, `url`)
-	VALUES ('0', '중국 미세먼지 정보',  'http://aqicn.org/');
+	VALUES ('0', '중국 미세먼지 정보',  'https://api.waqi.info/api/feed/@');
 
 INSERT INTO `source_info` (`source_id`, `desc`, `url`)
-	VALUES ('0', '국내 미세먼지 정보',  'http://openapi.airkorea.or.kr');
+	VALUES ('0', '국내 미세먼지 정보',  'http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMinuDustFrcstDspth?searchDate=');
 
 
 -- crawling source
@@ -232,7 +233,7 @@ INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('26',
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('27', '포천, 연천, 동두천', '포천, 연천, 동두천', '2');
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('28', '김포, 강화', '김포, 강화', '2');
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('29', '원주, 문막, 횡성', '원주, 문막, 횡성', '3');
-INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('30', '춘천, 홍천, 양구 ', '춘천, 홍천, 양구 ', '3');
+INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('30', '춘천, 홍천, 양구', '춘천, 홍천, 양구', '3');
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('31', '평창, 정선, 태백, 영월', '평창, 정선, 태백, 영월', '3');
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('32', '철원, 화천', '철원, 화천', '3');
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('33', '강릉, 동해, 삼척', '강릉, 동해, 삼척', '3');

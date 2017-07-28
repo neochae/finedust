@@ -11,6 +11,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(BASE_DIR, '..'))
 
 from finedust.settings.local_setting import *
+from finedust.util.database import *
 
 class FinedustBot:
     @staticmethod
@@ -23,8 +24,8 @@ class FinedustBot:
                             level=logging.INFO)
         self.logger = logging.getLogger(__name__)
 
-        self.domestic_region = ["서울", "경기", "강원", "충청", "경상", "전라", "제주"]
-        self.global_region = ["베이징", "상하이", "텐진", "광저우", "칭다", "다롄", "선양"]
+        self.domestic_region = database_get_custom_category().keys()
+        self.global_region = database_get_china_region().keys()
         self.home_command = "초기화면"
         self.handlers = self.make_handlers()
         self.default_reply_markup = self.make_buttons(self.handlers['main_handler'].keys(), default=None)
@@ -71,7 +72,7 @@ class FinedustBot:
         # 2 depth menu, 공개자료
         detail_handler = dict()
         for region in self.global_region:
-            detail_handler[region + ' 세계자료'] = self.global_region_detail
+            detail_handler[region + ' 자료'] = self.global_region_detail
         handlers['global_handler_detail'] = detail_handler
 
         return handlers
@@ -146,7 +147,7 @@ class FinedustBot:
         chat_id = update.message.chat_id
         message = update.message.text
 
-        #TODO, DATABASE ADD favorite region
+        database_add_to_favorite(chat_id, message.split()[0])
 
         send_message = '관심지역 ' + message + "를 완료하였습니다"
         self.telegram_bot.send_message(chat_id=chat_id, text=send_message,
@@ -169,7 +170,7 @@ class FinedustBot:
         chat_id = update.message.chat_id
         message = update.message.text
 
-        #TODO, DATABASE REMOVE favorite region
+        database_remove_favorite(chat_id, message.split()[0])
 
         send_message = '관심지역 ' + message + "를 완료하였습니다"
         self.telegram_bot.send_message(chat_id=chat_id, text=send_message,
@@ -205,10 +206,10 @@ class FinedustBot:
 
     def start(self, bot, update):
         chat_id = update.message.chat_id
+        database_add_user(chat_id)
         send_message = "환영합니다.\n%d 사용자" % (chat_id)
         self.telegram_bot.send_message(chat_id=chat_id, text=send_message,
                                        reply_markup=self.default_reply_markup)
-        #TODO, DATABASE INSERT USER(chat_id)
 
     def stop(self, bot, update):
         chat_id = update.message.chat_id

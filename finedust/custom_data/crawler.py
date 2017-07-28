@@ -10,6 +10,7 @@ sys.path.append(os.path.join(BASE_DIR, '..'))
 
 from finedust.settings.local_setting import *
 from finedust.util.screen import *
+from finedust.util.database import *
 
 class CustomDataCrawler:
     def __init__(self):
@@ -26,6 +27,10 @@ class CustomDataCrawler:
         self.detail_date = '#ct > div.post_title > * > span.date.font_l'
         self.detail_content = '#postContent'
         self.capture = True
+        self.source_info = database_get_source_id(self.base_url)
+        self.crawler_info = database_create_crawler_event(self.source_info)
+        self.region_info = database_get_custom_region()
+        self.dust_info = database_get_dust_info()
 
         self.driver = webdriver.PhantomJS(PHANTOM_WEBDRIVER)
         #self.driver = webdriver.Chrome('../chromedriver/mac/chromedriver')
@@ -120,6 +125,14 @@ class CustomDataCrawler:
 
         print(detail_url)
         print(category, title, writer, date, content, '\n')
+
+        #Test Code
+        database_add_finedust_data(
+            self.region_info[category],
+            self.crawler_info,
+            '2017-07-29 02:44:43',
+            self.dust_info['PM25'],
+            10, 20, 15)
 
     def find_element(self, soup, rule):
         elements = soup.select(rule)

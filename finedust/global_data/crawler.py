@@ -16,6 +16,7 @@ sys.path.append(os.path.join(BASE_DIR, '..'))
 
 from finedust.settings.local_setting import *
 from finedust.util.dbconnector import *
+from finedust.util.database import *
 
 #TODO, Crawling
 class GlobalDataCrawler :
@@ -23,6 +24,10 @@ class GlobalDataCrawler :
         self.basicUrl = 'https://api.waqi.info/api/feed/@'
         self.lastUrl = '/obs.kr.json'
         self.engine = DBconnector().connect_DB()
+        self.source_info = database_get_source_id(self.basicUrl)
+        self.crawler_info = database_create_crawler_event(self.source_info)
+        self.region_info = database_get_china_region()
+        self.dust_info = database_get_dust_info()
 
     def get_globaldata(self,id):
         requests.get(self.basicUrl + id + self.lastUrl, headers={'User-agent': 'Mozilla/5.0'})
@@ -96,7 +101,7 @@ class DBconnector :
             USER=DATABASES_MYSQL['USER'],
             PASSWORD=DATABASES_MYSQL['PASSWORD'],
             HOST=DATABASES_MYSQL['HOST'],
-            DBNAME='mydb'
+            DBNAME=DATABASES_MYSQL['SCHEMA']
         )
         engine = create_engine(connect_str, encoding='utf-8', echo=False)
         engine.connect()
