@@ -199,12 +199,6 @@ INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('6', '전�
 INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('7', '제주도');
 INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('8', '대한민국');
 INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('9', '중국');
-INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('10', '베이징');
-INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('11', '상하이');
-INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('12', '천진');
-INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('13', '청도');
-INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('14', '항주');
-
 
 
 -- region
@@ -282,3 +276,9 @@ INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES
 INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('72', '영암, 강진, 해남, 진도, 완도', '영암, 강진, 해남, 진도, 완도', '6');
 INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('73', '제주시', '제주시', '7');
 INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('74', '서귀포시 ', '서귀포시 ', '7');
+
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('75', '베이징 ', 'BEJING ', '9');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('76', '상하이 ', 'SANGHAI ', '9');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('77', '천진 ', 'TIANJIN ', '9');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('78', '청도 ', 'QINGDAO ', '9');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('79', '항주 ', 'HANGZHOU ', '9');
