@@ -79,7 +79,7 @@ class GlobalDataCrawler :
         return pd.read_json(data.text)
 
     def get_location(selfs):
-        location_info = ['1451','1449','1450','1453']
+        location_info = ['1451','1437','1452','1506','1439']
         return location_info
 
     def start(self):
