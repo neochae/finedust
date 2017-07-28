@@ -199,6 +199,13 @@ INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('6', '전�
 INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('7', '제주도');
 INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('8', '대한민국');
 INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('9', '중국');
+INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('10', '베이징');
+INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('11', '상하이');
+INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('12', '텐진');
+INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('13', '칭다오');
+INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('14', '항저우');
+
+
 
 -- region
 INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('1', '동작, 관악', '동작, 관악', '1');
