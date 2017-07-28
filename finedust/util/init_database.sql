@@ -197,6 +197,8 @@ INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('4', '충�
 INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('5', '경상도');
 INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('6', '전라도');
 INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('7', '제주도');
+INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('8', '대한민국');
+INSERT INTO `mydb`.`region_category` (`category_id`, `name`) VALUES ('9', '중국');
 
 -- region
 INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('1', '동작, 관악', '동작, 관악', '1');
