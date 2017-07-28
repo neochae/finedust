@@ -282,3 +282,20 @@ INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES
 INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('77', '천진 ', 'TIANJIN ', '9');
 INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('78', '청도 ', 'QINGDAO ', '9');
 INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('79', '항주 ', 'HANGZHOU ', '9');
+
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('80', '부산 ', 'BUSAN ', '8');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('81', '충북 ', 'CHUNGBUK ', '8');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('82', '충남 ', 'CHUNGNAM ', '8');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('83', '대구 ', 'DAEGU ', '8');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('84', '대전 ', 'DAEJEON ', '8');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('85', '강원 ', 'GANGWON ', '8');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('86', '광주 ', 'GWANGJU ', '8');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('87', '경북 ', 'GYUONGBUK ', '8');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('88', '경남 ', 'GYEONGNAM ', '8');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('89', '인천 ', 'INCHEON ', '8');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('90', '제주 ', 'JEJU ', '8');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('91', '전북 ', 'JEONBUK ', '8');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('92', '전남 ', 'JEONNAM ', '8');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('93', '세종 ', 'SEJONG ', '8');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('94', '서울 ', 'SEOUL ', '8');
+INSERT INTO `mydb`.`region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('95', '울산 ', 'ULSAN ', '8');
