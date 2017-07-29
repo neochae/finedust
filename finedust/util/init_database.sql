@@ -279,11 +279,11 @@ INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('72',
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('73', '제주시', '제주시', '7');
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('74', '서귀포시 ', '서귀포시 ', '7');
 
-INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('75', '베이징 ', 'BEJING ', '9');
-INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('76', '상하이 ', 'SANGHAI ', '9');
-INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('77', '천진 ', 'TIANJIN ', '9');
-INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('78', '청도 ', 'QINGDAO ', '9');
-INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('79', '항주 ', 'HANGZHOU ', '9');
+INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('75', '베이징', 'BEJING', '9');
+INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('76', '상하이', 'SANGHAI', '9');
+INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('77', '천진', 'TIANJIN', '9');
+INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('78', '청도', 'QINGDAO', '9');
+INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('79', '항주', 'HANGZHOU', '9');
 
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('80', '부산', 'BUSAN', '8');
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('81', '충북', 'CHUNGBUK', '8');
