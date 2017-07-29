@@ -9,7 +9,6 @@ import pandas as pd
 import pymysql
 from sqlalchemy import create_engine
 pymysql.install_as_MySQLdb()
-from finedust.settings.setting import DATABASES_MYSQL
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(BASE_DIR, '..'))
