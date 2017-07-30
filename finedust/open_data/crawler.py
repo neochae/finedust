@@ -37,7 +37,7 @@ region_dict = {
 }
 
 class OpenDataCrawler :
-    def __init__(self,id):
+    def __init__(self):
         self.basicUrl = 'http://openapi.airkorea.or.kr/openapi/services/rest/ArpltnInforInqireSvc/getMinuDustFrcstDspth?searchDate='
         self.date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.today = datetime.datetime.now().strftime('%Y-%m-%d')
@@ -131,5 +131,5 @@ class OpenDataCrawler :
         self.get_oepndata()
 
 if __name__ == '__main__':
-    crawler = OpenDataCrawler(id)
+    crawler = OpenDataCrawler()
     crawler.start()
