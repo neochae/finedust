@@ -186,7 +186,7 @@ class CustomDataCrawler:
 
         return None, None, None
 
-    def start(self):
+    def start_first(self):
         self.login()
 
         articles = list()
@@ -195,6 +195,14 @@ class CustomDataCrawler:
             print(menu, categories[menu], " 지역 게시판 자료를 수집합니다")
             articles.extend(self.process_main_url(menuid=categories[menu]))
 
+        print("게시글에 대한 상세 자료를 수집합니다", len(articles))
+        for article in articles:
+            self.process_sub_url(articleid=article)
+
+    def start(self):
+        self.login()
+        print("메인 페이지에서 갱신된 새로운 글 자료를 수집합니다")
+        articles = self.process_main_url()
         print("게시글에 대한 상세 자료를 수집합니다", len(articles))
         for article in articles:
             self.process_sub_url(articleid=article)
@@ -231,7 +239,6 @@ class CustomDataCrawler:
                     single_val = int(single[0])
                     print("단독 수치", content, " : ", single_val)
                     break
-
 
 if __name__ == '__main__':
     crawler = CustomDataCrawler()

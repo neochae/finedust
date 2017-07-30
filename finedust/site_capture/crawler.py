@@ -1,5 +1,6 @@
 import sys
 import os
+import shutil
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(BASE_DIR, '..'))
@@ -26,7 +27,10 @@ class SiteImageCrawler:
         time.sleep(self.delay)
 
         if self.video is not None:
-            page_record_video(self.driver, self.video, box=self.crop)
+            video_temp = IMAGE_DIR + "temp.mp4"
+            page_record_video(self.driver, video_temp, box=self.crop)
+            shutil.move(video_temp, self.video)
+
 
         if self.crop is not None:
             page_image_resize(self.driver, self.file, box=self.crop)
