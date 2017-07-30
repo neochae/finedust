@@ -154,6 +154,27 @@ def database_get_dust_info():
         db.close_DB()
         return dust_info
 
+def get_favorite_regions(chat_id):
+    db = DBConnector()
+    cursor = db.connection_DB()
+    region_info = list()
+
+    try:
+        sql = "SELECT `region_category`.`name` FROM `favorite_region`, `region_category` " \
+              "WHERE `region_category`.`category_id`=`favorite_region`.`region` AND `favorite_region`.`user`="+str(chat_id)
+        cursor.execute(sql)
+        regions = pd.DataFrame(cursor.fetchall())
+        region_info = regions.name
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 검색에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
+    return region_info
+
+
 
 def database_add_to_favorite(chat_id, region):
     db = DBConnector()

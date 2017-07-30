@@ -88,10 +88,13 @@ class FinedustBot:
     def favorite_region(self, update):
         chat_id = update.message.chat_id
 
-        #TODO, DATABASE QUERY, user - registered region
+        regions = get_favorite_regions(chat_id)
+        send_message = "%d - 등록지역목록\n" % (chat_id)
+        for region in regions:
+            send_message += region + "\n"
+        #TODO, favorite 지역에 특화된 정보 제공, 지역 카테고리내 사용자 등록 게시글을 보여줌
 
         reply_markup = self.make_buttons(self.handlers['favorite_handler'])
-        send_message = "추가기능을 선택해주세요"
         self.telegram_bot.send_message(chat_id=chat_id, text=send_message, reply_markup = reply_markup)
 
     def custom_data(self, update):
@@ -136,10 +139,13 @@ class FinedustBot:
 
     def favorite_region_register(self, update):
         chat_id = update.message.chat_id
-        #TODO, Database에서 읽어올 수 있도록,, 가능하다면 등록 가능한 지역만으로 버튼 구성
+
+        regions = get_favorite_regions(chat_id)
+        send_message = "%d - 등록지역목록\n" % (chat_id)
+        for region in regions:
+            send_message += region + "\n"
 
         reply_markup = self.make_buttons(self.handlers['favorite_handler_add'].keys())
-        send_message = "추가기능을 선택해주세요"
         self.telegram_bot.send_message(chat_id=chat_id, text=send_message,
                                        reply_markup=reply_markup)
 
@@ -147,8 +153,9 @@ class FinedustBot:
         chat_id = update.message.chat_id
         message = update.message.text
 
+        print(message.split()[0])
         send_message = "관심지역 등록에 실패하였습니다"
-        if message.split()[0] in self.domestic_region:
+        if message.split()[0] in self.domestic_region.keys():
             database_add_to_favorite(chat_id, self.domestic_region[message.split()[0]])
             send_message = '관심지역 ' + message + "를 완료하였습니다"
 
@@ -157,14 +164,17 @@ class FinedustBot:
 
     def favorite_region_remove(self, update):
         chat_id = update.message.chat_id
-        #TODO, Database에서 읽어올 수 있도록,, 가능하다면 삭제 가능한 지역만으로 버튼 구성
+
+        regions = get_favorite_regions(chat_id)
+        send_message = "%d - 등록지역목록\n" % (chat_id)
+        for region in regions:
+            send_message += region + "\n"
 
         regions = list()
         for region in self.domestic_region.keys():
             regions.append(region + " 삭제")
 
         reply_markup = self.make_buttons(regions)
-        send_message = "추가기능을 선택해주세요"
         self.telegram_bot.send_message(chat_id=chat_id, text=send_message,
                                        reply_markup=reply_markup)
 
@@ -173,7 +183,7 @@ class FinedustBot:
         message = update.message.text
 
         send_message = "관심지역 삭제에 실패하였습니다"
-        if message.split()[0] in self.domestic_region:
+        if message.split()[0] in self.domestic_region.keys():
             database_remove_favorite(chat_id, self.domestic_region[message.split()[0]])
             send_message = '관심지역 ' + message + "를 완료하였습니다"
 
