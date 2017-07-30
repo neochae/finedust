@@ -293,7 +293,7 @@ INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('70',
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('71', '나주, 화순, 보성, 고흥, 장흥', '나주, 화순, 보성, 고흥, 장흥', '6');
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('72', '영암, 강진, 해남, 진도, 완도', '영암, 강진, 해남, 진도, 완도', '6');
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('73', '제주시', '제주시', '7');
-INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('74', '서귀포시 ', '서귀포시 ', '7');
+INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('74', '서귀포시', '서귀포시', '7');
 
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('75', '베이징', 'BEJING', '9');
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('76', '상하이', 'SANGHAI', '9');
