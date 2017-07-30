@@ -37,7 +37,7 @@ class GlobalDataCrawler :
         json_data = self.get_json(resp)
         js_normal_data = json_normalize(json_data['rxs'][0])
         self.get_forecast_wind_data(js_normal_data)
-        # self.get_current_dust_data(js_normal_data)
+        self.get_current_dust_data(js_normal_data)
         # self.get_forecast_aqi_data(js_normal_data)
         # print(self.region_info)
         # print(self.crawler_info)
