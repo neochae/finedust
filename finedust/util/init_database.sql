@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `sep545`.`custom_article` (
   `writer` VARCHAR(45) NOT NULL,
   `date` DATETIME NOT NULL,
   `content` VARCHAR(512) NOT NULL,
+  `url` VARCHAR(512) NOT NULL,
   `region` INT(11) NOT NULL,
   `crawler` INT(11) NOT NULL,
   `data` INT(11) NOT NULL,
