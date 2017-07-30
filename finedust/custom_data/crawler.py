@@ -5,6 +5,7 @@ import os
 import sys
 import re
 import datetime
+from selenium.common.exceptions import TimeoutException
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(BASE_DIR, '..'))
@@ -38,7 +39,8 @@ class CustomDataCrawler:
 
         self.driver = webdriver.PhantomJS(PHANTOM_WEBDRIVER)
         #self.driver = webdriver.Chrome('../chromedriver/mac/chromedriver')
-        self.driver.implicitly_wait(3)
+        self.driver.implicitly_wait(20)
+        self.driver.set_page_load_timeout(20)
         self.groups = {"서울시 수치 공유": {'category': 6, 'start': 7, 'end': 16},
                        "경기도 수치 공유": {'category': 17, 'start': 18, 'end': 35},
                        "강원도 수치 공유": {'category': 36, 'start': 37, 'end': 42},
@@ -54,7 +56,6 @@ class CustomDataCrawler:
         self.driver.find_element_by_name('id').send_keys(NID)
         self.driver.find_element_by_name('pw').send_keys(NPWD)
         self.driver.find_element_by_xpath(self.login_xpath).click()
-        self.driver.implicitly_wait(3)
         time.sleep(2)
         print('login complete')
 
@@ -62,7 +63,12 @@ class CustomDataCrawler:
         main_url = self.base_url + '?iframe_url=/ArticleList.nhn?search.clubid=%s' % (self.club_id)
         main_url = main_url + '%26' + 'search.boardtype=L'
 
-        self.driver.get(main_url)
+        try:
+            self.driver.get(main_url)
+        except TimeoutException as e:
+            print(e)
+            return dict()
+
         html = self.driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
 
@@ -87,8 +93,13 @@ class CustomDataCrawler:
         main_url = main_url + '%26' + 'search.boardtype=L'
 
         #articles
-        self.driver.get(main_url)
-        time.sleep(10)
+        try:
+            self.driver.get(main_url)
+            time.sleep(10)
+        except TimeoutException as e:
+            print(e)
+            return
+
         self.driver.switch_to.frame(self.main_iframe);
         html = self.driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
@@ -112,7 +123,12 @@ class CustomDataCrawler:
 
         #detail pages
         detail_url = self.mobile_base_url + '/%s' % (articleid)
-        self.driver.get(detail_url)
+        try:
+            self.driver.get(detail_url)
+        except TimeoutException as e:
+            print(e)
+            return
+
         html = self.driver.page_source
         soup = BeautifulSoup(html, 'html.parser')
 
@@ -242,4 +258,5 @@ class CustomDataCrawler:
 
 if __name__ == '__main__':
     crawler = CustomDataCrawler()
+    crawler.start_first()
     crawler.start()
