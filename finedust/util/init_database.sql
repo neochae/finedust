@@ -1,6 +1,7 @@
 DROP SCHEMA IF EXISTS `sep545`;
 CREATE SCHEMA `sep545`;
 USE `sep545`;
+SET SQL_SAFE_UPDATES=0;
 
 -- MySQL Workbench Synchronization
 -- Generated: 2017-07-29 01:22

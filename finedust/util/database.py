@@ -156,14 +156,39 @@ def database_get_dust_info():
 
 
 def database_add_to_favorite(chat_id, region):
-    print(chat_id, region, " 관심지역 추가")
-    #TODO, database query
+    db = DBConnector()
+    cursor = db.connection_DB()
+
+    try:
+        sql = "INSERT INTO `favorite_region` " \
+              "VALUES ('0',"+str(chat_id)+","+str(region)+")"
+        cursor.execute(sql)
+        db.commit_DB()
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 추가에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
 
 
 def database_remove_favorite(chat_id, region):
-    print(chat_id, region, " 관심지역 삭제")
-    #TODO, database query
+    db = DBConnector()
+    cursor = db.connection_DB()
 
+    try:
+        sql = "DELETE FROM `favorite_region` " \
+              "WHERE `user`="+str(chat_id)+" AND `region`="+str(region)
+        cursor.execute(sql)
+        db.commit_DB()
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 삭제에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
 
 def database_get_source_id(base_url):
     db = DBConnector()
