@@ -60,7 +60,7 @@ class GracefulKiller:
 
 if __name__ == '__main__':
     threads = []
-    crawlers = {"custom_data/crawler.py":10*60,
+    crawlers = {"custom_data/crawler.py":5*60,
                 "global_data/crawler.py":30*60,
                 "open_data/crawler.py":30*60,
                 "site_capture/crawler.py": 1*60*60}
