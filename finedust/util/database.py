@@ -12,100 +12,147 @@ from finedust.util.dbconnector import *
 def database_add_user(chat_id):
     db = DBConnector()
     cursor = db.connection_DB()
-    sql = "REPLACE INTO `telegram_user` (`chat_id`) " \
-          "VALUES (" + str(chat_id) + ")"
-    cursor.execute(sql)
-    db.commit_DB()
-    cursor.close()
-    db.close_DB()
-    #print(sql)
+    try:
+        sql = "REPLACE INTO `telegram_user` (`chat_id`) " \
+              "VALUES (" + str(chat_id) + ")"
+        cursor.execute(sql)
+        db.commit_DB()
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 추가에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
+
 
 def database_create_crawler_event(source_id):
     db = DBConnector()
     cursor = db.connection_DB()
+    event_id = None
 
-    sql = "INSERT INTO `crawling_event` (`crawling_id`, `source`) " \
-          "VALUES (0, " + str(source_id) + ")"
-    cursor.execute(sql)
-    event_id = cursor.lastrowid
-    db.commit_DB()
-    cursor.close()
-    db.close_DB()
-    #print(sql, event_id)
-    return event_id
+    try:
+        sql = "INSERT INTO `crawling_event` (`crawling_id`, `source`) " \
+              "VALUES (0, " + str(source_id) + ")"
+        cursor.execute(sql)
+        event_id = cursor.lastrowid
+        db.commit_DB()
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 추가에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
+        return event_id
 
 def database_get_custom_category():
     db = DBConnector()
     cursor = db.connection_DB()
+    category_info = dict()
 
-    sql = "SELECT `name`, `category_id` " \
-          "FROM `region_category` " \
-          "WHERE `name` != '대한민국' " \
-          "AND `name` != '중국'"
-    cursor.execute(sql)
-    categories = pd.DataFrame(cursor.fetchall())
-    cursor.close()
-    db.close_DB()
-
-    return dict(zip(categories.name, categories.category_id))
+    try:
+        sql = "SELECT `name`, `category_id` " \
+              "FROM `region_category` " \
+              "WHERE `name` != '대한민국' " \
+              "AND `name` != '중국'"
+        cursor.execute(sql)
+        categories = pd.DataFrame(cursor.fetchall())
+        category_info = dict(zip(categories.name, categories.category_id))
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 추가에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
+        return category_info
 
 
 def database_get_custom_region():
     db = DBConnector()
     cursor = db.connection_DB()
+    region_info = dict()
 
-    sql = "SELECT `region`.`name`, `region`.`region_id` " \
-          "FROM `region`, `region_category` " \
-          "WHERE `region`.`category`=`region_category`.`category_id` AND `region_category`.`name`!='중국' AND `region_category`.`name`!='대한민국'"
-    cursor.execute(sql)
-    regions = pd.DataFrame(cursor.fetchall())
-    cursor.close()
-    db.close_DB()
-
-    return dict(zip(regions.name, regions.region_id))
+    try:
+        sql = "SELECT `region`.`name`, `region`.`region_id` " \
+              "FROM `region`, `region_category` " \
+              "WHERE `region`.`category`=`region_category`.`category_id` AND `region_category`.`name`!='중국' AND `region_category`.`name`!='대한민국'"
+        cursor.execute(sql)
+        regions = pd.DataFrame(cursor.fetchall())
+        region_info = dict(zip(regions.name, regions.region_id))
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 추가에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
+        return region_info
 
 
 def database_get_china_region():
     db = DBConnector()
     cursor = db.connection_DB()
+    region_info = dict()
 
-    sql = "SELECT `region`.`name`, `region`.`region_id` " \
-          "FROM `region`, `region_category` " \
-          "WHERE `region`.`category`=`region_category`.`category_id` AND `region_category`.`name`='중국'"
-    cursor.execute(sql)
-    regions = pd.DataFrame(cursor.fetchall())
-    cursor.close()
-    db.close_DB()
-
-    return dict(zip(regions.name, regions.region_id))
+    try:
+        sql = "SELECT `region`.`name`, `region`.`region_id` " \
+              "FROM `region`, `region_category` " \
+              "WHERE `region`.`category`=`region_category`.`category_id` AND `region_category`.`name`='중국'"
+        cursor.execute(sql)
+        regions = pd.DataFrame(cursor.fetchall())
+        region_info = dict(zip(regions.name, regions.region_id))
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 추가에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
+        return region_info
 
 
 def database_get_domestic_region():
     db = DBConnector()
     cursor = db.connection_DB()
+    region_info = dict()
 
-    sql = "SELECT `region`.`name`, `region`.`region_id` " \
-          "FROM `region`, `region_category` " \
-          "WHERE `region`.`category`=`region_category`.`category_id` AND `region_category`.`name`='대한민국'"
-    cursor.execute(sql)
-    regions = pd.DataFrame(cursor.fetchall())
-    cursor.close()
-    db.close_DB()
-
-    return dict(zip(regions.name, regions.region_id))
+    try:
+        sql = "SELECT `region`.`name`, `region`.`region_id` " \
+              "FROM `region`, `region_category` " \
+              "WHERE `region`.`category`=`region_category`.`category_id` AND `region_category`.`name`='대한민국'"
+        cursor.execute(sql)
+        regions = pd.DataFrame(cursor.fetchall())
+        region_info = dict(zip(regions.name, regions.region_id))
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 추가에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
+        return region_info
 
 
 def database_get_dust_info():
     db = DBConnector()
     cursor = db.connection_DB()
+    dust_info = dict()
 
-    sql = "SELECT `finedust_info`.`name`, `finedust_info`.`info_id` FROM `finedust_info`"
-    cursor.execute(sql)
-    dusts = pd.DataFrame(cursor.fetchall())
-    cursor.close()
-    db.close_DB()
-
-    return dict(zip(dusts.name, dusts.info_id))
+    try:
+        sql = "SELECT `finedust_info`.`name`, `finedust_info`.`info_id` FROM `finedust_info`"
+        cursor.execute(sql)
+        dusts = pd.DataFrame(cursor.fetchall())
+        dust_info = dict(zip(dusts.name, dusts.info_id))
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 추가에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
+        return dust_info
 
 
 def database_add_to_favorite(chat_id, region):
@@ -121,16 +168,21 @@ def database_remove_favorite(chat_id, region):
 def database_get_source_id(base_url):
     db = DBConnector()
     cursor = db.connection_DB()
+    source = None
 
-    sql = "SELECT `source_id` FROM `source_info` WHERE `url`="+"'"+base_url+"'"
-    print(sql)
-
-    cursor.execute(sql)
-    ids = pd.DataFrame(cursor.fetchall())
-    cursor.close()
-    db.close_DB()
-
-    return ids['source_id'].tolist()[0]
+    try:
+        sql = "SELECT `source_id` FROM `source_info` WHERE `url`="+"'"+base_url+"'"
+        cursor.execute(sql)
+        ids = pd.DataFrame(cursor.fetchall())
+        source = ids.source_id[0]
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 추가에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
+        return source
 
 '''
     미세먼지 정보를 database에 넣기 위한 API 
@@ -144,17 +196,47 @@ def database_add_finedust_data(region, crawler, time, dust, min, max, average):
     db = DBConnector()
     cursor = db.connection_DB()
 
-    sql = "INSERT INTO `finedust_data` " \
-          "VALUES ('0',"+str(dust)+","+ str(min)+","+str(max)+","+str(average)+")"
-    cursor.execute(sql)
-    id = cursor.lastrowid
-    print(id, sql)
+    try:
+        sql = "INSERT INTO `finedust_data` " \
+              "VALUES ('0',"+str(dust)+","+ str(min)+","+str(max)+","+str(average)+")"
+        print(sql)
+        cursor.execute(sql)
+        id = cursor.lastrowid
 
-    sql = "INSERT INTO `open_api` " \
-          "VALUES ('0',"+"'"+time+"'"+","+str(region)+","+str(crawler)+","+str(id)+")"
-    print(sql)
+        sql = "INSERT INTO `open_api` " \
+              "VALUES ('0',"+"'"+time+"'"+","+str(region)+","+str(crawler)+","+str(id)+")"
+        print(sql)
+        cursor.execute(sql)
+        db.commit_DB()
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 추가에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
 
-    cursor.execute(sql)
-    db.commit_DB()
-    cursor.close()
-    db.close_DB()
+def database_add_finedust_custom_data(region, crawler, time, dust, min, max, average,
+                                      article_id, title, content, writer, url):
+    db = DBConnector()
+    cursor = db.connection_DB()
+
+    try:
+        sql = "INSERT INTO `finedust_data` " \
+              "VALUES ('0',"+str(dust)+","+ str(min)+","+str(max)+","+str(average)+")"
+        print(sql)
+        cursor.execute(sql)
+        id = cursor.lastrowid
+
+        sql = "INSERT INTO `custom_article` " \
+              "VALUES ("+article_id+",'"+writer+"','"+time+"','"+title+"','"+content+"','"+url+"',"+str(region)+","+str(crawler)+","+str(id)+")"
+        print(sql)
+        cursor.execute(sql)
+        db.commit_DB()
+    except pymysql.err.IntegrityError:
+        print("데이터가 중복되어 추가에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()

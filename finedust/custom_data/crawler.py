@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import os
 import sys
 import re
+import datetime
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(BASE_DIR, '..'))
@@ -26,11 +27,14 @@ class CustomDataCrawler:
         self.detail_writer = '#ct > div.post_title > * > a.nick > span.end_user_nick > span'
         self.detail_date = '#ct > div.post_title > * > span.date.font_l'
         self.detail_content = '#postContent'
-        self.capture = True
+        self.capture = False
         self.source_info = database_get_source_id(self.base_url)
         self.crawler_info = database_create_crawler_event(self.source_info)
         self.region_info = database_get_custom_region()
         self.dust_info = database_get_dust_info()
+        self.range_ex = ["(\d+-\d+)", "(\d+~\d+)"]
+        self.max_ex = ["최대\s*(\d+)", "~\s*(\d+)"]
+        self.single_ex = ["초미세\s*(\d+)", "\s+(\d+)$", "\w+(\d+)$"]
 
         self.driver = webdriver.PhantomJS(PHANTOM_WEBDRIVER)
         #self.driver = webdriver.Chrome('../chromedriver/mac/chromedriver')
@@ -71,7 +75,7 @@ class CustomDataCrawler:
                     if hasattr(content, "contents"):
                         menuid = re.findall('menuid=(\d+)', content.contents[2].attrs['href'])
                         title = content.contents[2].contents[0]
-                        categories[title] = menuid
+                        categories[title] = menuid[0]
 
         return categories
 
@@ -123,16 +127,32 @@ class CustomDataCrawler:
         date = self.find_element(soup, self.detail_date)
         content = self.find_element(soup, self.detail_content)
 
-        print(detail_url)
-        print(category, title, writer, date, content, '\n')
+        #contente, for database
+        date = datetime.datetime.strptime(date, '%Y.%m.%d. %H:%M')
+        min, max, avg = self.find_dust_data([title, content])
 
-        #Test Code
-        database_add_finedust_data(
-            self.region_info[category],
-            self.crawler_info,
-            '2017-07-29 02:44:43',
-            self.dust_info['PM25'],
-            10, 20, 15)
+        print(detail_url)
+        print(category, title, writer, date, content)
+        print(min, max, avg)
+
+        if avg is not None:
+            if category in self.region_info.keys():
+                print("수치 정보를 database에 추가합니다 ", articleid, "\n")
+                database_add_finedust_custom_data(
+                    self.region_info[category],
+                    self.crawler_info,
+                    date.strftime("%Y-%m-%d %H:%M:%S"),
+                    self.dust_info['PM25'],
+                    min, max, avg,
+                    articleid,
+                    title,
+                    content,
+                    writer,
+                    detail_url)
+            else:
+                print("지역 정보를 찾을 수 없습니다 ", articleid, category, "\n")
+        else:
+            print("수치 정보를 찾을 수 없습니다 ", articleid, "\n")
 
     def find_element(self, soup, rule):
         elements = soup.select(rule)
@@ -140,16 +160,77 @@ class CustomDataCrawler:
             return ele.text.strip()
         return ''
 
+    def find_dust_data(self, datas):
+        for data in datas:
+            for ex in self.range_ex:
+                range = re.findall(ex, data)
+                if (len(range) > 0):
+                    range_string = range[0].replace('~', '-')
+                    min_max_val = [int(s) for s in range_string.split("-") if s.isdigit()]
+                    min = min_max_val[0]
+                    max = min_max_val[0]
+                    avg = int(sum(min_max_val)/len(min_max_val))
+                    return min, max, avg
+
+            for ex in self.max_ex:
+                max = re.findall(ex, data)
+                if (len(max) > 0):
+                    max_val = int(max[0])
+                    return max_val, max_val, max_val
+
+            for ex in self.single_ex:
+                single = re.findall(ex, data)
+                if (len(single) > 0):
+                    single_val = int(single[0])
+                    return single_val, single_val, single_val
+
+        return None, None, None
+
     def start(self):
         self.login()
 
+        articles = list()
         categories = self.process_category()
-        for key in categories.keys():
-            print(key, categories[key])
+        for menu in categories.keys():
+            print(menu, categories[menu], " 지역 게시판 자료를 수집합니다")
+            articles.extend(self.process_main_url(menuid=categories[menu]))
 
-        articles = self.process_main_url()
+        print("게시글에 대한 상세 자료를 수집합니다", len(articles))
         for article in articles:
             self.process_sub_url(articleid=article)
+
+
+    def test(self):
+        test_data = ["광명6동 3-5", "관악구 남현동 4~6", "금천경찰서 근처 75-80(칼더)", "성북구 안암동(10~13)",
+                     "광명하안8단지, 최대21 [1]", "광명 철산동 ~~60", "금천경찰서 근처 최대 98",
+                     "관악 삼성동 초미세23", "초미세 34", "잠실4동 23", "고양시 삼송지구신원동16"]
+
+        range_ex = ["(\d+-\d+)", "(\d+~\d+)"]
+        max_ex = ["최대\s*(\d+)", "~\s*(\d+)"]
+        single_ex = ["초미세\s*(\d+)", "\s+(\d+)$", "\w+(\d+)$"]
+
+        for content in test_data:
+            for ex in range_ex:
+                range = re.findall(ex, content)
+                if (len(range) > 0):
+                    range_string = range[0].replace('~', '-')
+                    min_max_val = [int(s) for s in range_string.split("-") if s.isdigit()]
+                    print("범위 수치", content, " : ", min_max_val)
+                    break
+
+            for ex in max_ex:
+                max = re.findall(ex, content)
+                if (len(max) > 0):
+                    max_val = int(max[0])
+                    print("최대 수치", content, " : ", max_val)
+                    break
+
+            for ex in single_ex:
+                single = re.findall(ex, content)
+                if (len(single) > 0):
+                    single_val = int(single[0])
+                    print("단독 수치", content, " : ", single_val)
+                    break
 
 
 if __name__ == '__main__':
