@@ -170,6 +170,22 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
 
+CREATE TABLE IF NOT EXISTS `sep545`.`wind_data` (
+  `wind_id` INT NOT NULL AUTO_INCREMENT,
+  `time` DATETIME NOT NULL,
+  `data_direction` INT NOT NULL,
+  `region` INT NOT NULL,
+  PRIMARY KEY (`wind_id`),
+  INDEX `fk_detail_wind_data_region1_idx` (`region` ASC),
+  CONSTRAINT `fk_detail_wind_data_region1`
+    FOREIGN KEY (`region`)
+    REFERENCES `sep545`.`region` (`region_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

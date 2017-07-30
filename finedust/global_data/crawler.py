@@ -36,9 +36,9 @@ class GlobalDataCrawler :
         # print(resp.text)
         json_data = self.get_json(resp)
         js_normal_data = json_normalize(json_data['rxs'][0])
+        self.get_forecast_wind_data(js_normal_data)
+        # self.get_current_dust_data(js_normal_data)
         # self.get_forecast_aqi_data(js_normal_data)
-        # self.get_forecast_wind_data(js_normal_data)
-        self.get_current_dust_data(js_normal_data)
         # print(self.region_info)
         # print(self.crawler_info)
 
@@ -55,16 +55,47 @@ class GlobalDataCrawler :
     #     print("=====AQI 대기질 데이터 불러오기=====")
     #     return print(df_total_aqi)
     #
-    # def get_forecast_wind_data(self, data):
-    #     df_dust_wind = json_normalize(data['msg.forecast.wind'][0])
-    #     wind_time = pd.DataFrame({'WIND_TIME': df_dust_wind['t']})
-    #     wind_speed = pd.DataFrame({'WIND_SPEED': [item[0] for item in df_dust_wind['w']]})
-    #     wind_direction = pd.DataFrame({'WIND_DIRECTION': [item[2] for item in df_dust_wind['w']]})
-    #     df_total_wind = pd.concat([wind_time, wind_speed, wind_direction], axis=1)
-    #     df_total_wind['WIND_CITY_NAME'] = data['msg.city.name'][0]
-    #     df_total_wind.to_sql(name='finedust_global_wind', con=self.engine, if_exists='append', index=False)
-    #     print("=====풍속, 풍향 데이터 불러오기=====")
-    #     return print(df_total_wind)
+
+    def get_forecast_wind_data(self, data):
+        df_dust_wind = json_normalize(data['msg.forecast.wind'][0])
+        wind_time = pd.DataFrame({'time': df_dust_wind['t']})
+        # wind_speed = pd.DataFrame({'WIND_SPEED': [item[0] for item in df_dust_wind['w']]})
+        wind_direction = pd.DataFrame({'data_direction': [item[2] for item in df_dust_wind['w']]})
+        # df_total_wind = pd.concat([wind_time, wind_speed, wind_direction], axis=1)
+        df_total_wind = pd.concat([wind_time,  wind_direction], axis=1)
+        df_total_wind['time'] = pd.to_datetime(df_total_wind['time'])
+        df_total_wind['region'] = self.region_info[data['msg.city.name'][0]]
+        # print(df_total_wind)
+
+
+        db = DBConnector()
+        cursor = db.connection_DB()
+
+        for index, data in df_total_wind.iterrows():
+            sql = "SELECT * FROM `wind_data` WHERE `time`=%s and `region`=%s"
+            cursor.execute(sql, (str(data['time']),str(data['region'])))
+            result = cursor.fetchone()
+            # If the forecast doesn't exist in database, we should update the forecase
+            if (result):
+                print('Duplicated Data')
+            else:
+                sql = "INSERT INTO `wind_data` " \
+                      "VALUES ('0'," + "'" + str(data['time']) + "'" + "," + str(data['data_direction']) + "," + str(data['region']) + ")"
+                print(sql)
+                cursor.execute(sql)
+
+        # connection is not autocommit by default. So you must commit to save
+        # your changes.
+
+        db.commit_DB()
+        cursor.close()
+        db.close_DB()
+
+
+        # df_total_wind['WIND_CITY_NAME'] = data['msg.city.name'][0]
+        # df_total_wind.to_sql(name='finedust_global_wind', con=self.engine, if_exists='append', index=False)
+        # print("=====풍속, 풍향 데이터 불러오기=====")
+        return df_total_wind
 
     def get_current_dust_data(self, data):
 
