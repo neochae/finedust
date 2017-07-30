@@ -55,7 +55,7 @@ class OpenDataCrawler :
         # json_normal_data = json_normalize(json_data['list'][0])
         # self.updateDatabase(json_normal_data)
 
-        resp = requests.get(self.avgBasicUrl + self.servieKey + self.lastUrl, headers={'User-agent': 'Mozilla/5.0'})
+        resp = requests.get(self.avgBasicUrl + self.servieKey + self.lastUrl, headers={'User-agent': 'Mozilla/5.0'}, timeout=30)
         json_data = self.get_json(resp)
         json_normal_data = json_normalize(json_data['list'][0])
         self.updateAvgDatabase(json_normal_data)
