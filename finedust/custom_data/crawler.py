@@ -258,5 +258,5 @@ class CustomDataCrawler:
 
 if __name__ == '__main__':
     crawler = CustomDataCrawler()
-    crawler.start_first()
-    #crawler.start()
+    #crawler.start_first()
+    crawler.start()
