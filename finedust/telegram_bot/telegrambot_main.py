@@ -106,6 +106,8 @@ class FinedustBot:
                                  records['data_min'][index], records['data_max'][index], records['data_avg'][index])
             self.telegram_bot.send_message(chat_id=chat_id, text=send_message, reply_markup=reply_markup)
 
+        self.telegram_bot.send_message(chat_id=chat_id, text="지역을 선택하세요", reply_markup=reply_markup)
+
 
     def custom_data(self, update):
         chat_id = update.message.chat_id
