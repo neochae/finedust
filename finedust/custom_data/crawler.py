@@ -184,7 +184,7 @@ class CustomDataCrawler:
                     range_string = range[0].replace('~', '-')
                     min_max_val = [int(s) for s in range_string.split("-") if s.isdigit()]
                     min = min_max_val[0]
-                    max = min_max_val[0]
+                    max = min_max_val[1]
                     avg = int(sum(min_max_val)/len(min_max_val))
                     return min, max, avg
 
@@ -258,5 +258,5 @@ class CustomDataCrawler:
 
 if __name__ == '__main__':
     crawler = CustomDataCrawler()
-    crawler.start_first()
+    #crawler.start_first()
     crawler.start()

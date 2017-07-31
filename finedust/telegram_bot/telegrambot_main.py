@@ -93,10 +93,15 @@ class FinedustBot:
         chat_id = update.message.chat_id
 
         regions = get_favorite_regions(chat_id)
-        send_message = "%d - 등록지역목록\n" % (chat_id)
+        send_message = "%d - 등록지역목록\n\n" % (chat_id)
         for region in regions:
-            send_message += region + "\n"
-        #TODO, favorite 지역에 특화된 정보 제공, 지역 카테고리내 사용자 등록 게시글을 보여줌
+            send_message += region + " 지역 정보\n"
+            print("지역 정보", send_message, self.custom_region[region])
+            records = database_get_finedust_custom_data(self.custom_region[region], self.dust_info['PM25'])
+            for index in range(0, len(records.index)):
+                send_message += "\n%s\n%s\n%s\n(최소:%s, 최대:%s, 평균%s)\n" % \
+                                (records['name'][index], records['date'][index], records['url'][index],
+                                 records['data_min'][index], records['data_max'][index], records['data_avg'][index])
 
         reply_markup = self.make_buttons(self.handlers['favorite_handler'])
         self.telegram_bot.send_message(chat_id=chat_id, text=send_message, reply_markup = reply_markup)
@@ -114,23 +119,20 @@ class FinedustBot:
 
     def global_data(self, update):
         chat_id = update.message.chat_id
-        self.send_image(chat_id, IMAGE_DIR + 'nullschool.jpg', caption='미항공우주국 사진')
-        self.send_image(chat_id, IMAGE_DIR + 'aqicn.jpg', caption='국제 민간단체 미세먼지')
-
-        #TODO, 중국 주요 7개 도시에 대한 현재 수치 정보를 전송, 버튼으로 주요 도시 정보 보기 지원
+        send_message = "%s, 최근 동북아시아 데이터\n" % ('PM10')
+        records = database_get_recent_finedust_data(self.global_category['중국'], self.dust_info['PM10'])
+        for index in range(0, len(records.index)):
+            send_message += "%s %s (%s, %s, %s)\n" % \
+            (records['name'][index], records['time'][index], records['data_min'][index], records['data_max'][index], records['data_avg'][index])
 
         reply_markup = self.make_buttons(self.handlers['global_handler_detail'].keys())
-        send_message = "추가기능을 선택해주세요"
         self.telegram_bot.send_message(chat_id=chat_id, text=send_message, reply_markup = reply_markup)
+        self.send_image(chat_id, IMAGE_DIR + 'nullschool.jpg', caption='미항공우주국 사진')
+        self.send_image(chat_id, IMAGE_DIR + 'aqicn.jpg', caption='국제 민간단체 미세먼지')
 
 
     def public_data(self, update):
         chat_id = update.message.chat_id
-        message = update.message.text
-
-        #self.send_image(chat_id, IMAGE_DIR + 'naver_pm25.jpg', caption='네이버 초미세먼지')
-        #self.send_image(chat_id, IMAGE_DIR + 'naver_pm10.jpg', caption='네이버 미세먼지')
-        #self.send_document(chat_id, IMAGE_DIR+ "forecast.gif", caption='예측자료')
 
         send_message = "%s, 최근 지역 공공 데이터\n" % ('PM10')
         records = database_get_recent_finedust_data(self.open_category['대한민국'], self.dust_info['PM10'])
@@ -140,6 +142,10 @@ class FinedustBot:
 
         reply_markup = self.make_buttons(self.handlers['public_handler_detail'].keys())
         self.telegram_bot.send_message(chat_id=chat_id, text=send_message, reply_markup = reply_markup)
+
+        self.send_image(chat_id, IMAGE_DIR + 'naver_pm25.jpg', caption='네이버 초미세먼지')
+        self.send_image(chat_id, IMAGE_DIR + 'naver_pm10.jpg', caption='네이버 미세먼지')
+        #self.send_document(chat_id, IMAGE_DIR+ "forecast.gif", caption='예측자료')
 
 
     def go_home(self, update):
@@ -213,9 +219,12 @@ class FinedustBot:
         chat_id = update.message.chat_id
         message = update.message.text
 
-        #TODO, DATABASE QUERY, 한 지역의 과거 수치 정보, 과거-현재-미래
+        send_message = "%s %s 지역데이터\n" % ('PM10', message.split()[0])
+        records = database_get_finedust_data(self.global_region[message.split()[0]], 'PM10')
+        for index in range(0, len(records.index)):
+            send_message += "%s (%s, %s, %s)\n" % \
+            (records['time'][index], records['data_min'][index], records['data_max'][index], records['data_avg'][index])
 
-        send_message = message + " 확인하였습니다"
         self.telegram_bot.send_message(chat_id=chat_id, text=send_message)
 
     def public_region_detail(self, update):

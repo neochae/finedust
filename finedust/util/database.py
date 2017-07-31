@@ -362,6 +362,36 @@ def database_get_finedust_data(region, dust):
         db.close_DB()
         return records
 
+def database_get_finedust_custom_data(region, dust):
+    db = DBConnector()
+    cursor = db.connection_DB()
+
+    records = pd.DataFrame()
+    try:
+        sql = "SELECT * " \
+              "FROM `custom_article` " \
+                "JOIN `region` ON `custom_article`.`region`=`region`. `region_id` " \
+                "JOIN `finedust_data` ON `custom_article`.`data`=`finedust_data`.`data_id` " \
+                "JOIN `finedust_info` ON `finedust_data`.`info`=`finedust_info`.`info_id` " \
+                "JOIN `region_category` ON `region`.`category`=`region_category`.`category_id` " \
+              "WHERE `finedust_data`.`info`='"+str(dust)+"' "\
+              "AND `region_category`.`category_id`='"+str(region)+"' "\
+              "ORDER BY `custom_article`.`crawler` DESC LIMIT 10"
+        print(sql)
+        cursor.execute(sql)
+        record_num = cursor.rowcount
+        if record_num > 0:
+            records = pd.DataFrame(cursor.fetchall())
+            records = records[['date', 'url', 'name', 'data_min', 'data_max', 'data_avg']]
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 검색에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
+        return records
+
 
 def database_get_recent_finedust_data(region, dust):
     db = DBConnector()
