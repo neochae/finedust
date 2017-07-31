@@ -64,10 +64,12 @@ class OpenDataCrawler :
                 self.updateAvgDatabase(json_normal_data)
             else:
                 print(resp)
+        except requests.exceptions.ConnectionError:
+            print('ConnectionError')
+        except requests.exceptions.Timeout:
+            print('Timeout')
         except requests.exceptions.RequestException as e:
             print(e)
-
-
 
     def get_json(self, data):
         return json.loads(data.text)
