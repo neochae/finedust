@@ -261,7 +261,6 @@ class FinedustBot:
         reply_markup = telegram.ReplyKeyboardRemove()
         self.telegram_bot.send_message(chat_id=chat_id, text=send_message,
                                        reply_markup=reply_markup)
-        # TODO, DATABASE REMOVE USER(chat_id)
 
     def help(self, bot, update):
         chat_id = update.message.chat_id
