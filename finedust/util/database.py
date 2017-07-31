@@ -207,7 +207,7 @@ def get_favorite_regions(chat_id):
               "WHERE `region_category`.`category_id`=`favorite_region`.`region` AND `favorite_region`.`user`="+str(chat_id)
         cursor.execute(sql)
         regions = pd.DataFrame(cursor.fetchall())
-        region_info = regions.name
+        region_info = regions['name'].tolist()
     except pymysql.err.IntegrityError:
         print("데이터가 오류로 검색에 실패하였습니다 :", sys.exc_info()[0])
     except:

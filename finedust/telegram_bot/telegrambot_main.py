@@ -91,20 +91,21 @@ class FinedustBot:
 
     def favorite_region(self, update):
         chat_id = update.message.chat_id
+        reply_markup = self.make_buttons(self.handlers['favorite_handler'])
 
         regions = get_favorite_regions(chat_id)
         send_message = "%d - 등록지역목록\n\n" % (chat_id)
+        self.send_message(chat_id, send_message)
         for region in regions:
-            send_message += region + " 지역 정보\n"
+            send_message = region + " 지역 정보\n"
             print("지역 정보", send_message, self.custom_region[region])
             records = database_get_finedust_custom_data(self.custom_region[region], self.dust_info['PM25'])
             for index in range(0, len(records.index)):
                 send_message += "\n%s\n%s\n%s\n(최소:%s, 최대:%s, 평균%s)\n" % \
                                 (records['name'][index], records['date'][index], records['url'][index],
                                  records['data_min'][index], records['data_max'][index], records['data_avg'][index])
+            self.telegram_bot.send_message(chat_id=chat_id, text=send_message, reply_markup=reply_markup)
 
-        reply_markup = self.make_buttons(self.handlers['favorite_handler'])
-        self.telegram_bot.send_message(chat_id=chat_id, text=send_message, reply_markup = reply_markup)
 
     def custom_data(self, update):
         chat_id = update.message.chat_id
@@ -166,11 +167,16 @@ class FinedustBot:
         chat_id = update.message.chat_id
         message = update.message.text
 
-        print(message.split()[0])
         send_message = "관심지역 등록에 실패하였습니다"
-        if message.split()[0] in self.custom_region.keys():
-            database_add_to_favorite(chat_id, self.custom_region[message.split()[0]])
-            send_message = '관심지역 ' + message + "를 완료하였습니다"
+        favorite_region = message.split()[0]
+        regions = get_favorite_regions(chat_id)
+        print("favorite:", favorite_region, "regions:", regions)
+        if favorite_region in regions:
+            send_message = "이미 관심 지역 목록에 포함되어 있습니다."
+        else:
+            if favorite_region in self.custom_region.keys():
+                database_add_to_favorite(chat_id, self.custom_region[favorite_region])
+                send_message = '관심지역 ' + message + "를 완료하였습니다"
 
         self.telegram_bot.send_message(chat_id=chat_id, text=send_message,
                                        reply_markup=self.default_reply_markup)
