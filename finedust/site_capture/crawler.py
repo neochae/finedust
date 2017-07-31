@@ -41,15 +41,24 @@ class SiteImageCrawler:
         self.get_image()
 
 if __name__ == '__main__':
-    #nullschool 사진
-    url = 'https://earth.nullschool.net/#current/particulates/surface/level/overlay=pm10/patterson=125.04,34.80,2967/loc=126.98,37.56'
-    size = (1024, 860)
-    crop = (0, 0, 1024, 768)
+    #초미세먼지
+    url = 'https://m.search.naver.com/search.naver?query=%EC%B4%88%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80'
+    size = (1024, 900)
+    crop = (70, 240, 689, 764)
     delay = 10
-    file = IMAGE_DIR + 'nullschool.jpg'
-    video = IMAGE_DIR + 'nullschool.mp4'
+    file = IMAGE_DIR + 'naver_pm25.jpg'
 
-    crawler = SiteImageCrawler(url, file, video=video, size=size, crop=crop, delay=delay)
+    crawler = SiteImageCrawler(url, file, size=size, crop=crop, delay=delay)
+    crawler.start()
+
+    #미세먼지
+    url = 'https://m.search.naver.com/search.naver?query=%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80'
+    size = (1024, 900)
+    crop = (70, 240, 689, 764)
+    delay = 10
+    file = IMAGE_DIR + 'naver_pm10.jpg'
+
+    crawler = SiteImageCrawler(url, file, size=size, crop=crop, delay=delay)
     crawler.start()
 
     #aqicn 사진
@@ -62,24 +71,13 @@ if __name__ == '__main__':
     crawler = SiteImageCrawler(url, file, size=size, crop=crop, delay=delay)
     crawler.start()
 
-
-    #초미세먼지
-    url = 'https://m.search.naver.com/search.naver?query=%EC%B4%88%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80'
-    size = (1024, 900)
-    crop = (70, 240, 689, 764)
+    #nullschool 사진
+    url = 'https://earth.nullschool.net/#current/particulates/surface/level/overlay=pm10/patterson=125.04,34.80,2967/loc=126.98,37.56'
+    size = (1024, 860)
+    crop = (0, 0, 1024, 768)
     delay = 10
-    file = IMAGE_DIR + 'naver_pm25.jpg'
+    file = IMAGE_DIR + 'nullschool.jpg'
+    video = IMAGE_DIR + 'nullschool.mp4'
 
-    crawler = SiteImageCrawler(url, file, size=size, crop=crop, delay=delay)
-    crawler.start()
-
-
-    #미세먼지
-    url = 'https://m.search.naver.com/search.naver?query=%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80'
-    size = (1024, 900)
-    crop = (70, 240, 689, 764)
-    delay = 10
-    file = IMAGE_DIR + 'naver_pm10.jpg'
-
-    crawler = SiteImageCrawler(url, file, size=size, crop=crop, delay=delay)
+    crawler = SiteImageCrawler(url, file, video=video, size=size, crop=crop, delay=delay)
     crawler.start()
