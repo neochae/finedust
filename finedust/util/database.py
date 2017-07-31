@@ -286,3 +286,45 @@ def database_add_finedust_custom_data(region, crawler, time, dust, min, max, ave
     finally:
         cursor.close()
         db.close_DB()
+
+
+def database_get_finedust_data(region, dust):
+    db = DBConnector()
+    cursor = db.connection_DB()
+
+    records = pd.DataFrame()
+    try:
+        '''      
+        sql = "SELECT `region`.`name`, `finedust_info`.`name`, `open_api`.`time`" \
+              ", `finedust_data`.`data_min`, `finedust_data`.`data_max`, `finedust_data`.`data_avg` " \
+              "FROM `open_api`, `region`, `finedust_data`, `finedust_info` " \
+              "WHERE `open_api`.`region`=`region`.`region_id` " \
+              "AND `finedust_data`.`data_id`=`open_api`.`data` " \
+              "AND `finedust_data`.`info`=`finedust_info`.`info_id` " \
+              "AND `finedust_info`.`name`='PM10' " \
+              "AND `region`.`region_id`='"+str(region)+"' "\
+              "ORDER BY `open_api`.`crawler` DESC LIMIT 10"
+        '''
+        sql = "SELECT * " \
+              "FROM `open_api`, `region`, `finedust_data`, `finedust_info` " \
+              "WHERE `open_api`.`region`=`region`.`region_id` " \
+              "AND `finedust_data`.`data_id`=`open_api`.`data` " \
+              "AND `finedust_data`.`info`=`finedust_info`.`info_id` " \
+              "AND `finedust_info`.`name`='"+dust+"' "\
+              "AND `region`.`region_id`='"+str(region)+"' "\
+              "ORDER BY `open_api`.`crawler` DESC LIMIT 10"
+        print(sql)
+        cursor.execute(sql)
+        record_num = cursor.rowcount
+        if record_num > 0:
+            records = pd.DataFrame(cursor.fetchall())
+            records = records[['name', 'time', 'finedust_info.name', 'data_min', 'data_max', 'data_avg']]
+            print(records)
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 검색에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
+        return records
