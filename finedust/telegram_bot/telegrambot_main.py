@@ -129,6 +129,7 @@ class FinedustBot:
         self.telegram_bot.send_message(chat_id=chat_id, text=send_message, reply_markup = reply_markup)
         self.send_image(chat_id, IMAGE_DIR + 'nullschool.jpg', caption='미항공우주국 사진')
         self.send_image(chat_id, IMAGE_DIR + 'aqicn.jpg', caption='국제 민간단체 미세먼지')
+        self.send_video(chat_id, IMAGE_DIR + 'nullschool.mp4', caption='미항공우주국 영상')
 
 
     def public_data(self, update):
@@ -145,8 +146,7 @@ class FinedustBot:
 
         self.send_image(chat_id, IMAGE_DIR + 'naver_pm25.jpg', caption='네이버 초미세먼지')
         self.send_image(chat_id, IMAGE_DIR + 'naver_pm10.jpg', caption='네이버 미세먼지')
-        #self.send_document(chat_id, IMAGE_DIR+ "forecast.gif", caption='예측자료')
-
+        self.send_document(chat_id, IMAGE_DIR+ "forecast.gif", caption='예측자료')
 
     def go_home(self, update):
         chat_id = update.message.chat_id
