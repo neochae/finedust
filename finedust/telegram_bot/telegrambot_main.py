@@ -108,12 +108,9 @@ class FinedustBot:
 
     def custom_data(self, update):
         chat_id = update.message.chat_id
-        message = update.message.text
-
-        # TODO, 국내 주요 7개 도시에 대한 사용자 등록 정보를 전송, 버튼으로 주요 도시 정보 보기 지원
 
         reply_markup = self.make_buttons(self.handlers['custom_handler_detail'].keys())
-        send_message = "추가기능을 선택해주세요"
+        send_message = "관심 지역을 선택해주세요"
         self.telegram_bot.send_message(chat_id=chat_id, text=send_message, reply_markup = reply_markup)
 
 
@@ -210,9 +207,14 @@ class FinedustBot:
         chat_id = update.message.chat_id
         message = update.message.text
 
-        #TODO, DATABASE QUERY, 한 지역의 과거 수치 정보, 게시글 목록
+        region = message.split()[0]
+        send_message = region + " 지역 정보\n"
+        records = database_get_finedust_custom_data(self.custom_region[region], self.dust_info['PM25'])
+        for index in range(0, len(records.index)):
+            send_message += "\n%s\n%s\n%s\n(최소:%s, 최대:%s, 평균%s)\n" % \
+                            (records['name'][index], records['date'][index], records['url'][index],
+                             records['data_min'][index], records['data_max'][index], records['data_avg'][index])
 
-        send_message = message + " 확인하였습니다"
         self.telegram_bot.send_message(chat_id=chat_id, text=send_message)
 
     def global_region_detail(self, update):

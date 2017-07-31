@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `sep545`.`favorite_region` (
   CONSTRAINT `user14`
     FOREIGN KEY (`user`)
     REFERENCES `sep545`.`telegram_user` (`chat_id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
   CONSTRAINT `region4`
     FOREIGN KEY (`region`)
