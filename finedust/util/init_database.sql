@@ -321,3 +321,7 @@ INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('93',
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('94', '서울', 'SEOUL', '8');
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('95', '울산', 'ULSAN', '8');
 INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('96', '경기', 'GEYONGGI', '8');
+
+INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('97', '위해', 'WEIHAI', '9');
+INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('98', '대련', 'DALIAN', '9');
+INSERT INTO `region` (`region_id`, `name`, `eng_name`, `category`) VALUES ('99', '난징', 'NANJING', '9');
