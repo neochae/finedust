@@ -25,8 +25,11 @@ class FinedustBot:
         self.logger = logging.getLogger(__name__)
 
         self.custom_region = database_get_custom_category()
+        self.global_category = database_get_china_category()
         self.global_region = database_get_china_region()
+        self.open_category = database_get_open_category()
         self.open_region = database_get_domestic_region()
+        self.dust_info = database_get_dust_info()
         self.home_command = "초기화면"
         self.handlers = self.make_handlers()
         self.default_reply_markup = self.make_buttons(self.handlers['main_handler'].keys(), default=None)
@@ -100,6 +103,7 @@ class FinedustBot:
 
     def custom_data(self, update):
         chat_id = update.message.chat_id
+        message = update.message.text
 
         # TODO, 국내 주요 7개 도시에 대한 사용자 등록 정보를 전송, 버튼으로 주요 도시 정보 보기 지원
 
@@ -122,17 +126,19 @@ class FinedustBot:
 
     def public_data(self, update):
         chat_id = update.message.chat_id
-        self.send_image(chat_id, IMAGE_DIR + 'naver_pm25.jpg', caption='네이버 초미세먼지')
-        self.send_image(chat_id, IMAGE_DIR + 'naver_pm10.jpg', caption='네이버 미세먼지')
+        message = update.message.text
+
+        #self.send_image(chat_id, IMAGE_DIR + 'naver_pm25.jpg', caption='네이버 초미세먼지')
+        #self.send_image(chat_id, IMAGE_DIR + 'naver_pm10.jpg', caption='네이버 미세먼지')
         #self.send_document(chat_id, IMAGE_DIR+ "forecast.gif", caption='예측자료')
 
-        print(self.open_region)
-        # TODO, 국내 주요 7개 도시에 대한 현재 수치 정보를 전송, 버튼으로 주요 도시 정보 보기 지원
-        #for region in self.open_region.keys():
-        #    database_get_finedust_data(self.open_region[region], 'PM10')
+        send_message = "%s, 최근 지역 공공 데이터\n" % ('PM10')
+        records = database_get_recent_finedust_data(self.open_category['대한민국'], self.dust_info['PM10'])
+        for index in range(0, len(records.index)):
+            send_message += "%s %s (%s, %s, %s)\n" % \
+            (records['name'][index], records['time'][index], records['data_min'][index], records['data_max'][index], records['data_avg'][index])
 
         reply_markup = self.make_buttons(self.handlers['public_handler_detail'].keys())
-        send_message = "추가기능을 선택해주세요"
         self.telegram_bot.send_message(chat_id=chat_id, text=send_message, reply_markup = reply_markup)
 
 

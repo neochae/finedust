@@ -69,6 +69,49 @@ def database_get_custom_category():
         return category_info
 
 
+def database_get_open_category():
+    db = DBConnector()
+    cursor = db.connection_DB()
+    category_info = dict()
+
+    try:
+        sql = "SELECT `name`, `category_id` " \
+              "FROM `region_category` " \
+              "WHERE `name` = '대한민국' "
+        cursor.execute(sql)
+        categories = pd.DataFrame(cursor.fetchall())
+        category_info = dict(zip(categories.name, categories.category_id))
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 추가에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
+        return category_info
+
+
+def database_get_china_category():
+    db = DBConnector()
+    cursor = db.connection_DB()
+    category_info = dict()
+
+    try:
+        sql = "SELECT `name`, `category_id` " \
+              "FROM `region_category` " \
+              "WHERE `name` = '중국' "
+        cursor.execute(sql)
+        categories = pd.DataFrame(cursor.fetchall())
+        category_info = dict(zip(categories.name, categories.category_id))
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 추가에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
+        return category_info
+
 def database_get_custom_region():
     db = DBConnector()
     cursor = db.connection_DB()
@@ -294,31 +337,55 @@ def database_get_finedust_data(region, dust):
 
     records = pd.DataFrame()
     try:
-        '''      
-        sql = "SELECT `region`.`name`, `finedust_info`.`name`, `open_api`.`time`" \
-              ", `finedust_data`.`data_min`, `finedust_data`.`data_max`, `finedust_data`.`data_avg` " \
-              "FROM `open_api`, `region`, `finedust_data`, `finedust_info` " \
-              "WHERE `open_api`.`region`=`region`.`region_id` " \
-              "AND `finedust_data`.`data_id`=`open_api`.`data` " \
-              "AND `finedust_data`.`info`=`finedust_info`.`info_id` " \
-              "AND `finedust_info`.`name`='PM10' " \
-              "AND `region`.`region_id`='"+str(region)+"' "\
-              "ORDER BY `open_api`.`crawler` DESC LIMIT 10"
-        '''
         sql = "SELECT * " \
-              "FROM `open_api`, `region`, `finedust_data`, `finedust_info` " \
-              "WHERE `open_api`.`region`=`region`.`region_id` " \
-              "AND `finedust_data`.`data_id`=`open_api`.`data` " \
-              "AND `finedust_data`.`info`=`finedust_info`.`info_id` " \
-              "AND `finedust_info`.`name`='"+dust+"' "\
+              "FROM `open_api` " \
+                "JOIN `region` ON `open_api`.`region`=`region`. `region_id` " \
+                "JOIN `finedust_data` ON `open_api`.`data`=`finedust_data`.`data_id` " \
+                "JOIN `finedust_info` ON `finedust_data`.`info`=`finedust_info`.`info_id` " \
+              "WHERE `finedust_info`.`name`='"+dust+"' "\
               "AND `region`.`region_id`='"+str(region)+"' "\
               "ORDER BY `open_api`.`crawler` DESC LIMIT 10"
+
         print(sql)
         cursor.execute(sql)
         record_num = cursor.rowcount
         if record_num > 0:
             records = pd.DataFrame(cursor.fetchall())
             records = records[['name', 'time', 'finedust_info.name', 'data_min', 'data_max', 'data_avg']]
+            print(records)
+    except pymysql.err.IntegrityError:
+        print("데이터가 오류로 검색에 실패하였습니다 :", sys.exc_info()[0])
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+    finally:
+        cursor.close()
+        db.close_DB()
+        return records
+
+
+def database_get_recent_finedust_data(region, dust):
+    db = DBConnector()
+    cursor = db.connection_DB()
+
+    records = pd.DataFrame()
+    try:
+        sql = "SELECT * FROM `open_api` " \
+                    "JOIN `finedust_data` ON `open_api`.`data`=`finedust_data`.`data_id` " \
+                    "JOIN `region` ON `open_api`.`region`=`region`. `region_id` " \
+                "WHERE `finedust_data`.`info`='"+str(dust)+"' " \
+                    "AND `open_api`.`crawler`= (SELECT `open_api`.`crawler` " \
+                        "FROM `open_api` " \
+                            "JOIN `region` ON `open_api`.`region`=`region`. `region_id` " \
+                            "JOIN `region_category` ON `region`.`category`=`region_category`. `category_id` " \
+                        "WHERE `region_category`. `category_id`='"+str(region)+"'" \
+                        "ORDER BY `open_api`.`crawler` DESC " \
+                        "LIMIT 1)"
+        print(sql)
+        cursor.execute(sql)
+        record_num = cursor.rowcount
+        if record_num > 0:
+            records = pd.DataFrame(cursor.fetchall())
+            records = records[['name', 'time', 'data_min', 'data_max', 'data_avg']]
             print(records)
     except pymysql.err.IntegrityError:
         print("데이터가 오류로 검색에 실패하였습니다 :", sys.exc_info()[0])
