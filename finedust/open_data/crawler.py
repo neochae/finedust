@@ -6,6 +6,7 @@ import datetime
 import pymysql.cursors
 import requests
 import json
+import urllib.request
 from pandas.io.json import json_normalize
 import pandas as pd
 
@@ -50,11 +51,6 @@ class OpenDataCrawler :
         self.dust_info = database_get_dust_info()
 
     def get_oepndata(self):
-        # resp = requests.get(self.basicUrl + self.today + self.servieKey + self.lastUrl, headers={'User-agent': 'Mozilla/5.0'})
-        # json_data = self.get_json(resp)
-        # json_normal_data = json_normalize(json_data['list'][0])
-        # self.updateDatabase(json_normal_data)
-
         try:
             resp = requests.get(self.avgBasicUrl + self.servieKey + self.lastUrl, headers={'User-agent': 'Mozilla/5.0'},
                                 timeout=30)
@@ -71,8 +67,32 @@ class OpenDataCrawler :
         except requests.exceptions.RequestException as e:
             print(e)
 
+        try:
+            print(self.today)
+            resp = requests.get(self.basicUrl + self.today + self.servieKey + self.lastUrl,
+                                headers={'User-agent': 'Mozilla/5.0'},
+                                timeout=30)
+            if (resp.status_code == 200):
+                json_data = self.get_json(resp)
+                json_normal_data = json_normalize(json_data['list'][0])
+                self.updateImage(json_normal_data)
+            else:
+                print(resp)
+        except requests.exceptions.ConnectionError:
+            print('ConnectionError')
+        except requests.exceptions.Timeout:
+            print('Timeout')
+        except requests.exceptions.RequestException as e:
+            print(e)
+
     def get_json(self, data):
         return json.loads(data.text)
+
+    def updateImage(self, data):
+        image = data['imageUrl7'][0]
+
+        FORECAST_GIF = IMAGE_DIR + "forecast.gif"
+        urllib.request.urlretrieve(image, FORECAST_GIF)
 
     def updateDatabase(self, data):
         image = data['imageUrl7'][0]
