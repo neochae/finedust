@@ -17,7 +17,8 @@ class SiteImageCrawler:
         self.crop = crop
         self.delay = delay
         self.driver = webdriver.PhantomJS(PHANTOM_WEBDRIVER)
-        self.driver.implicitly_wait(3)
+        self.driver.implicitly_wait(20)
+        self.driver.set_page_load_timeout(20)
 
     def get_image(self):
         if self.size is not None:
