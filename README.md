@@ -16,8 +16,8 @@ Basic Development
 
 Information Source
 ------------------
-http://openapi.airkorea.or.kr/
-http://aqicn.org
+- http://openapi.airkorea.or.kr/
+- http://aqicn.org
 
 License
 -------
