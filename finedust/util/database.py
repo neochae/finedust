@@ -368,6 +368,7 @@ def database_get_finedust_custom_data(region, dust):
 
     records = pd.DataFrame()
     try:
+        '''
         sql = "SELECT * " \
               "FROM `custom_article` " \
                 "JOIN `region` ON `custom_article`.`region`=`region`. `region_id` " \
@@ -377,6 +378,13 @@ def database_get_finedust_custom_data(region, dust):
               "WHERE `finedust_data`.`info`='"+str(dust)+"' "\
               "AND `region_category`.`category_id`='"+str(region)+"' "\
               "ORDER BY `custom_article`.`crawler` DESC LIMIT 10"
+        '''
+        sql = "SELECT * " \
+              "FROM `custom_data` " \
+              "WHERE `custom_data`.`info_id`='"+str(dust)+"' "\
+                "AND `custom_data`.`category`='"+str(region)+"' "\
+              "ORDER BY `custom_data`.`crawler` DESC LIMIT 10"
+
         print(sql)
         cursor.execute(sql)
         record_num = cursor.rowcount
