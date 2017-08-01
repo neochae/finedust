@@ -188,6 +188,13 @@ CREATE TABLE IF NOT EXISTS `sep545`.`wind_data` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+CREATE  OR REPLACE VIEW `custom_data` AS
+SELECT `custom_article`.`article_id`, `custom_article`.`date`, `custom_article`.`url`, `custom_article`.`crawler`,`finedust_info`.`info_id`, `finedust_data`.`data_min`, `finedust_data`.`data_max`, `finedust_data`.`data_avg`, `region`.`region_id`, `region`.`name`, `region`.`category`
+FROM `custom_article`
+	JOIN `finedust_data` ON `custom_article`.`data`=`finedust_data`.`data_id`
+	JOIN `finedust_info` ON `finedust_data`.`info`=`finedust_info`.`info_id`
+	JOIN `region` ON `custom_article`.`region`=`region`. `region_id`
+  JOIN `region_category` ON `region`.`category`=`region_category`. `category_id`;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
