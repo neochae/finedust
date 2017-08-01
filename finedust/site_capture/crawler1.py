@@ -10,8 +10,8 @@ from finedust.site_capture.crawler import *
 
 if __name__ == '__main__':
     # aqicn 사진
-    url = 'http://aqicn.org/forecast/seoul/kr/'
-    size = (1024, 860)
+    url = 'http://aqicn.org/map/beijing/kr/#@g/35.7687/123.1348/5z'
+    size = (1350, 860)
     crop = (0, 0, 1024, 768)
     delay = 20
     file = IMAGE_DIR + 'aqicn.jpg'
