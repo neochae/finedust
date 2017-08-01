@@ -58,7 +58,9 @@ if __name__ == '__main__':
     crawlers = {"custom_data/crawler.py":5*60,
                 "global_data/crawler.py":30*60,
                 "open_data/crawler.py":30*60,
-                "site_capture/crawler.py": 1*60*60}
+                "site_capture/crawler.py":40*60,
+                "site_capture/crawler1.py":1*60*60,
+                "site_capture/crawler2.py":2*60*60}
     for crawler in crawlers.keys():
         thread1 = CrawlerThread(crawler, crawlers[crawler])
         thread1.start()
