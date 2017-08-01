@@ -65,7 +65,7 @@ if __name__ == '__main__':
     url = 'http://aqicn.org/forecast/seoul/kr/'
     size = (1024, 860)
     crop = (0, 0, 1024, 768)
-    delay = 10
+    delay = 20
     file = IMAGE_DIR + 'aqicn.jpg'
 
     crawler = SiteImageCrawler(url, file, size=size, crop=crop, delay=delay)
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     url = 'https://earth.nullschool.net/#current/particulates/surface/level/overlay=pm10/patterson=125.04,34.80,2967/loc=126.98,37.56'
     size = (1024, 860)
     crop = (0, 0, 1024, 768)
-    delay = 10
+    delay = 20
     file = IMAGE_DIR + 'nullschool.jpg'
     video = IMAGE_DIR + 'nullschool.mp4'
 
