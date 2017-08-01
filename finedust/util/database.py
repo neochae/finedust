@@ -344,13 +344,16 @@ def database_get_finedust_data(region, dust):
                 "JOIN `finedust_info` ON `finedust_data`.`info`=`finedust_info`.`info_id` " \
               "WHERE `finedust_info`.`name`='"+dust+"' "\
               "AND `region`.`region_id`='"+str(region)+"' "\
-              "ORDER BY `open_api`.`crawler` DESC LIMIT 10"
+              "ORDER BY `open_api`.`crawler` DESC LIMIT 100"
 
         print(sql)
         cursor.execute(sql)
         record_num = cursor.rowcount
         if record_num > 0:
             records = pd.DataFrame(cursor.fetchall())
+            records.drop_duplicates(['time', 'data_min', 'data_max', 'data_avg'], keep='last')
+            if len(records.index) > 10:
+                records = records[:5]
             records = records[['name', 'time', 'finedust_info.name', 'data_min', 'data_max', 'data_avg']]
             print(records)
     except pymysql.err.IntegrityError:
