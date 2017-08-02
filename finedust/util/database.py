@@ -352,8 +352,8 @@ def database_get_finedust_data(region, dust):
         if record_num > 0:
             records = pd.DataFrame(cursor.fetchall())
             records = records.drop_duplicates(['time'], keep='last').reset_index(drop=True)
-            if len(records.index) > 10:
-                records = records[:10]
+            if len(records.index) > 15:
+                records = records[:15]
             records = records[['name', 'time', 'finedust_info.name', 'data_min', 'data_max', 'data_avg']]
             print(records)
     except pymysql.err.IntegrityError:
